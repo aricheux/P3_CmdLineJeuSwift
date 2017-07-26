@@ -31,29 +31,30 @@ class Player{
     }
     
     func choiceCharacter() {
-        print("Choisir le type du personnage 1 :"
-            + "\n1. Combattant 2. Mage 3. Colosse 4. Nain")
-        // Wait the input value
-        if let response = readLine(){
-            let numType = Int(response)!
-            // Add a new character according to the input value
-            switch numType {
-            case 1:
-                self.characters.append(Character(type: .fighter, name: "Warrior"))
-            case 2:
-                self.characters.append(Character(type: .mage, name: "Heal"))
-            case 3:
-                self.characters.append(Character(type: .colossus, name: "Tank"))
-            case 4:
-                self.characters.append(Character(type: .dwarf, name: "Nain"))
-            default:
-                print("Entrée non valide")
+        print("A toi \(self.name)!")
+        for _ in 0...charactersMax-1{
+            // Wait the input value
+            if let response = readLine(){
+                let numType = Int(response)!
+                // Add a new character according to the input value
+                switch numType {
+                case 1:
+                    self.characters.append(Character(type: .fighter, name: "Warrior"))
+                case 2:
+                    self.characters.append(Character(type: .mage, name: "Heal"))
+                case 3:
+                    self.characters.append(Character(type: .colossus, name: "Tank"))
+                case 4:
+                    self.characters.append(Character(type: .dwarf, name: "Nain"))
+                default:
+                    print("Entrée non valide")
+                }
             }
-            print("vous avez \(numType)")
+
         }
     }
     
-    func showStatusTeam() {
+    func showTeamStatus() {
         print("Equipe de \(self.name) : ")
         for i in 0...self.characters.count-1{
             print("\(i+1).\(self.characters[i].type) (vie:\(self.characters[i].life) / dégat:\(self.characters[i].weapon.damage))")
@@ -103,4 +104,13 @@ class Weapon{
 }
 
 let player_1 = Player(name: "Antoine")
+let player_2 = Player(name: "Kevin")
+
+print("Choisir le type de vos personnages :"
+    + "\n1. Combattant 2. Mage 3. Colosse 4. Nain")
+//
 player_1.choiceCharacter()
+player_1.showTeamStatus()
+//
+player_2.choiceCharacter()
+player_2.showTeamStatus()
