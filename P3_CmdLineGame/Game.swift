@@ -8,6 +8,16 @@
 
 import Foundation
 
+extension Int {
+    var boolValue: Bool {
+        if self == 0 {
+            return false
+        } else {
+            return true
+        }
+    }
+}
+
 enum actionType : Int{
     case attack, heal
 }
@@ -39,43 +49,116 @@ class Game{
             case .selectedCharacter:
                 characterSelection = selectedCharacter(player : self.player[iPlayer])
                 if characterSelection != nil{
+                    print("ok_1")
                     // Next step
                     stepAction = .selectedAction
                 }
             case .selectedAction:
-                actionSelection = selectedAction(player : self.player[iPlayer])
+                // Choice the action only if it's a mage
+                if characterSelection!.type == .mage {
+                    actionSelection = selectedAction(player : self.player[iPlayer])
+                }else{
+                    actionSelection = .attack
+                }
                 if actionSelection != nil{
+                    print("ok_2")
                     // Next step
-                    stepAction = .selectedAction
+                    stepAction = .selectedTarget
                 }
             case .selectedTarget:
-                targetSelection = selectedTarget(player : self.player[iPlayer])
+                var iAdversary : Int
+                if iPlayer == 0{
+                    iAdversary = 1
+                }else{
+                    iAdversary = 0
+                }
+                
+                targetSelection = selectedTarget(player : self.player[iPlayer], adversary : self.player[iAdversary], action : actionSelection!)
                 if targetSelection != nil{
+                    print("ok_3")
                     // Next step
                     stepAction = .executeAction
                 }
             case .executeAction:
-                // Next player
-                iPlayer += 1
-                if iPlayer > self.playerNumber-1{
-                    iPlayer = 0
+                if executeAction(selection: characterSelection!, target: targetSelection!, type: actionSelection!){
+                    // Next player
+                    iPlayer += 1
+                    if iPlayer > self.playerNumber-1{
+                        iPlayer = 0
+                    }
+                    // Next step
+                    stepAction = .selectedCharacter
                 }
-                // Next step
-                stepAction = .selectedCharacter
             }
         }
     }
     // the player select who use
     private func selectedCharacter(player : Player) -> Character? {
-        return nil
+        var selectedCharacter : Character?
+        
+        print("Choisir un personnage :",terminator: " ")
+        for i in 0...player.characters.count-1{
+            print("\(i+1).\(player.characters[i].name)",terminator: " ")
+        }
+        // Wait the entered value
+        let numSelection = selectionFromUser()
+        if numSelection > 0 {
+            switch numSelection {
+            case 1...player.characters.count-1:
+                selectedCharacter = player.characters[numSelection-1]
+            default:
+                print("Veuillez entrer un numéro valide")
+            }
+        }
+        return selectedCharacter
     }
     // the player select the action to do
     private func selectedAction(player : Player) -> actionType?{
-        return nil
+        var selectedAction : actionType?
+        
+        print("Que voulez vous faire : 1. Attaquer 2.Soigner")
+        // Wait the entered value
+        let numSelection = selectionFromUser()
+        if numSelection > 0 {
+            switch numSelection {
+            case 1...2:
+                selectedAction = actionType(rawValue: numSelection-1)
+            default:
+                print("Veuillez entrer un numéro valide")
+            }
+        }
+        return selectedAction
     }
     // the player select the target
-    private func selectedTarget(player : Player) -> Character? {
-        return nil
+    private func selectedTarget(player : Player, adversary: Player, action : actionType) -> Character? {
+        var targetCharacter : Character?
+        
+        switch action {
+        case .attack:
+            print("Qui attaquer :",terminator: " ")
+            for i in 0...adversary.characters.count-1{
+                print("\(i+1).\(adversary.characters[i].name)",terminator: " ")
+            }
+            
+        case .heal:
+            print("Qui soigner :",terminator: " ")
+            for i in 0...player.characters.count-1{
+                print("\(i+1).\(player.characters[i].name)",terminator: " ")
+            }
+        }
+        // Wait the entered value
+        let numSelection = selectionFromUser()
+        if numSelection > 0 {
+            // Define the target according to the action and selection
+            switch action {
+            case .attack:
+                targetCharacter = adversary.characters[numSelection-1]
+                
+            case .heal:
+                targetCharacter = player.characters[numSelection-1]
+            }
+        }
+        return targetCharacter
     }
     // execute the action to the target
     private func executeAction(selection : Character, target : Character, type : actionType) -> Bool{
@@ -104,23 +187,17 @@ class Game{
     private func choiceCharacterType(player : Player) -> Bool{
         var characterTypeOk = false
         // Wait the entered value
-        if let response = readLine(){
-            // Check if the input is an integer valude
-            if isStringAnInt(string: response){
-                // convert to integer value
-                let numType = Int(response)!
-                // Add a new character according to the input value
-                switch numType {
-                case 1...4:
-                    // Add new character
-                    // subtract 1 to match with the enumeration
-                    player.characters.append(Character(type: characterType(rawValue: numType-1)!, name:"Character"))
-                    // function ok
-                    characterTypeOk = true
-                default:
-                    print("Veuillez entrer un numéro valide")
-                }
-            }else{
+        let numSelection = selectionFromUser()
+        if numSelection > 0 {
+            // Add a new character according to the input value
+            switch numSelection {
+            case 1...4:
+                // Add new character
+                // subtract 1 to match with the enumeration
+                player.characters.append(Character(type: characterType(rawValue: numSelection-1)!, name:"Character"))
+                // function ok
+                characterTypeOk = true
+            default:
                 print("Veuillez entrer un numéro valide")
             }
         }
@@ -171,7 +248,7 @@ class Game{
         var iCharacter = 0
         var nameExisting = false
         
-        for iPlayer in 0...playerNb-1{
+        for iPlayer in 0...playerNumber-1{
             // do not continue to the next player if we have already an existing name
             if nameExisting == false{
                 // check if the name is already use
@@ -192,6 +269,22 @@ class Game{
     // Check if the entered value is an integer value
     private func isStringAnInt(string: String) -> Bool {
         return Int(string) != nil
+    }
+    
+    // Return the number of selection
+    private func selectionFromUser() -> Int{
+        var numSelection = 0
+        // Wait the entered value
+        if let response = readLine(){
+            // Check if the input is an integer valude
+            if isStringAnInt(string: response){
+                // convert to integer value
+                numSelection = Int(response)!
+            }else{
+                print("Veuillez entrer un numéro valide")
+            }
+        }
+        return numSelection
     }
     
 }

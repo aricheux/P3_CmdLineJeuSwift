@@ -30,7 +30,7 @@ class Character {
             self.weapon = Weapon(type: .damage, damage: 10, healing : 0)
         case .mage:
             self.life = 50
-            self.weapon = Weapon(type: .healing, damage: 0, healing : 20)
+            self.weapon = Weapon(type: .healing, damage: 20, healing : 20)
         case .colossus:
             self.life = 200
             self.weapon = Weapon(type: .damage, damage: 5, healing : 0)

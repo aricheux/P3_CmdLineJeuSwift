@@ -21,7 +21,5 @@ game.player[1].characters.append(Character(type: .colossus, name:"tank 2"))
 game.player[1].characters.append(Character(type: .mage, name:"heal 2"))
 game.player[1].characters.append(Character(type: .dwarf, name:"nain 2"))
 
-for iPlayer in 0...game.playerNb-1{
-    //game.configureTeam(player: game.player[iPlayer])
-}
+game.playGame()
 
