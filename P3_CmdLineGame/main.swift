@@ -187,7 +187,6 @@ class Game{
                 }
             }
         }
-        
         return nameExisting
     }
     
@@ -198,11 +197,9 @@ class Game{
     
 }
 
-
 // Create the game
 let game = Game(playerNb: 2)
 
-//
 for iPlayer in 0...game.playerNb-1{
     game.configureTeam(player: game.player[iPlayer])
 }
