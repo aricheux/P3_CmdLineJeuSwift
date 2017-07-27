@@ -65,12 +65,14 @@ class Game{
                     stepAction = .selectedTarget
                 }
             case .selectedTarget:
+                // Define the index for the adversary
                 var iAdversary : Int
                 if iPlayer == 0{
                     iAdversary = 1
                 }else{
                     iAdversary = 0
                 }
+                // Define the target
                 targetSelection = selectedTarget(player : self.player[iPlayer], adversary : self.player[iAdversary], action : actionSelection!)
                 if targetSelection != nil{
                     // Next step
