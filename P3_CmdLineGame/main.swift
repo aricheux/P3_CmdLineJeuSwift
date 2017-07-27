@@ -8,7 +8,7 @@
 import Foundation
 
 // Create the game
-let game = Game(playerNb: 2)
+let game = Game(playerNumber: 2)
 game.player.append(Player(name: "Antoine"))
 game.player.append(Player(name: "Kevin"))
 
@@ -24,6 +24,4 @@ game.player[1].characters.append(Character(type: .dwarf, name:"nain 2"))
 for iPlayer in 0...game.playerNb-1{
     //game.configureTeam(player: game.player[iPlayer])
 }
-
-game.player[0].characters[0].life -= 10
 

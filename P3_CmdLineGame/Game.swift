@@ -12,36 +12,56 @@ enum actionType : Int{
     case attack, heal
 }
 
+enum enum_stepAction{
+    case selectedCharacter, selectedAction, selectedTarget, executeAction
+}
+
 class Game{
-    var playerNb : Int
+    var playerNumber : Int
     let charactersMax = 3
     var player : [Player] = []
     
-    init(playerNb: Int){
-        self.playerNb = playerNb
+    init(playerNumber: Int){
+        self.playerNumber = playerNumber
     }
     
     // Starting the game
     public func playGame(){
+        var iPlayer = 0
+        var stepAction : enum_stepAction = .selectedCharacter
+        var characterSelection : Character?
+        var actionSelection : actionType?
+        var targetSelection : Character?
+        
+        // Run the game until one of player have no character alive
         while self.player[0].checkCharactersAlive() && self.player[1].checkCharactersAlive() {
-            var iPlayer = 0
-            while true{
-                // select the character that makes the action
-                let characterSelection = selectedCharacter(player : self.player[iPlayer])
+            switch stepAction {
+            case .selectedCharacter:
+                characterSelection = selectedCharacter(player : self.player[iPlayer])
                 if characterSelection != nil{
-                    // select the action type
-                    let actionSelection = selectedAction(player : self.player[iPlayer])
-                    if actionSelection != nil{
-                        // select the target of the action
-                        let targetSelection = selectedTarget(player : self.player[iPlayer])
-                        if targetSelection != nil{
-                            if executeAction(selection: characterSelection!, target: targetSelection!, type: actionSelection!){
-                                iPlayer += 1
-                            }
-                        }
-                    }
-                    
+                    // Next step
+                    stepAction = .selectedAction
                 }
+            case .selectedAction:
+                actionSelection = selectedAction(player : self.player[iPlayer])
+                if actionSelection != nil{
+                    // Next step
+                    stepAction = .selectedAction
+                }
+            case .selectedTarget:
+                targetSelection = selectedTarget(player : self.player[iPlayer])
+                if targetSelection != nil{
+                    // Next step
+                    stepAction = .executeAction
+                }
+            case .executeAction:
+                // Next player
+                iPlayer += 1
+                if iPlayer > self.playerNumber-1{
+                    iPlayer = 0
+                }
+                // Next step
+                stepAction = .selectedCharacter
             }
         }
     }
