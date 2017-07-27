@@ -58,34 +58,45 @@ class Weapon{
 class Player{
     var name : String
     var characters : [Character] = []
-    let charactersMax:Int = 3
     
     init(name : String){
         self.name = name
     }
     
+}
+class Game{
+    var playerNb : Int
+    let charactersMax = 3
+    var player : [Player] = []
+    
+    init(playerNb: Int){
+        self.playerNb = playerNb
+        self.player.append(Player(name: "Antoine"))
+        self.player.append(Player(name: "Kevin"))
+    }
+    
     // Configure the team of the player
-    public func configureTeam() {
-        print("********** A toi \(self.name), choisit ton équipe **********")
+    public func configureTeam(player : Player) {
+        print("****** A toi \(player.name), choisit tes 3 personnages ******")
         var iCharacters = 0
-        //
+        // Create character of the team
         while (iCharacters < charactersMax) {
             // Choice the type of the character
-            print("Type du personnage \(iCharacters+1) : 1. Combattant 2. Mage 3. Colosse 4. Nain")
-            if choiceCharacterType(){
-                // Choice the type of the character
+            print("Type du personnage \(iCharacters+1) : 1.Combattant 2.Mage 3.Colosse 4.Nain")
+            if choiceCharacterType(player: player){
+                // Choice the name of the character
                 print("Entrer le nom du personnage \(iCharacters+1) :")
-                if choiceCharacterName(){
+                if choiceCharacterName(player: player){
                     // Next character
                     iCharacters += 1
                 }
             }
         }
-        showTeamStatus()
+        showTeamStatus(player: player)
     }
     
-    // choice the type of the character
-    private func choiceCharacterType() -> Bool{
+    // Choice the type of the character
+    private func choiceCharacterType(player : Player) -> Bool{
         var characterTypeOk = false
         // Wait the entered value
         if let response = readLine(){
@@ -98,7 +109,7 @@ class Player{
                 case 1...4:
                     // Add new character
                     // subtract 1 to match with the enumeration
-                    self.characters.append(Character(type: characterType(rawValue: numType-1)!, name: "Warrior"))
+                    player.characters.append(Character(type: characterType(rawValue: numType-1)!, name: "Warrior"))
                     // function ok
                     characterTypeOk = true
                 default:
@@ -112,30 +123,21 @@ class Player{
     }
     
     // Choice the name of the character
-    private func choiceCharacterName() -> Bool{
+    private func choiceCharacterName(player : Player) -> Bool{
         var characterNameOk = false
-        var i = 0
-        
+
         while characterNameOk == false{
             // Wait the entered value
             if let response = readLine(){
                 if response.characters.count > 0{
                     // check if the name is already use
-                    while i < self.characters.count{
-                        if (self.characters[i].name == response){
-                            print("Le nom est déjà utilisé, veuillez entrer un autre nom")
-                            // do not continue
-                            break
-                        }else{
-                            i += 1
-                        }
-                    }
-                    // Check if the loop do not have error
-                    if (i == self.characters.count){
+                    if (checkNameExisting(name: response) == false){
                         // Change the character name by the name entered
-                        self.characters[self.characters.count-1].name = response
+                        player.characters[player.characters.count-1].name = response
                         // function is a success
                         characterNameOk = true
+                    }else{
+                        print("Le nom est déjà utilisé, veuillez entrer un autre nom")
                     }
                 }else{
                     print("Veuillez entrer un nom valide (minimum 1 charactères)")
@@ -146,25 +148,54 @@ class Player{
     }
     
     // Show the actual status of the team
-    private func showTeamStatus() {
-        print("Equipe de \(self.name) : ")
-        for i in 0...self.characters.count-1{
-            print("\(self.characters[i].name) -> \(self.characters[i].type) vie(\(self.characters[i].life)) dégat(\(self.characters[i].weapon.damage))")
+    private func showTeamStatus(player : Player) {
+        print("Equipe de \(player.name) : ")
+        for i in 0...player.characters.count-1{
+            print("\(player.characters[i].name) -> \(player.characters[i].type)"
+                + " vie(\(player.characters[i].life))"
+                + " dégat(\(player.characters[i].weapon.damage))")
         }
         print("\n")
+    }
+    
+    // Check if the name entered is already existing
+    private func checkNameExisting(name : String) -> Bool{
+        var iCharacter = 0
+        var nameExisting = false
+        
+        for iPlayer in 0...playerNb-1{
+            // do not continue to the next player if we have already an existing name
+            if nameExisting == false{
+                // check if the name is already use
+                while iCharacter < player[iPlayer].characters.count{
+                    if (player[iPlayer].characters[iCharacter].name == name){
+                        // name already existing
+                        nameExisting = true
+                        // do not continue
+                        break
+                    }else{
+                        iCharacter += 1
+                    }
+                }
+            }
+        }
+        
+        return nameExisting
     }
     
     // Check if the entered value is an integer value
     private func isStringAnInt(string: String) -> Bool {
         return Int(string) != nil
     }
+    
 }
-// Create all player
-let playerInGame = 2
-let player = [Player(name: "Antoine"),Player(name: "Kevin")]
+
+
+// Create the game
+let game = Game(playerNb: 2)
 
 //
-for iPlayer in 0...playerInGame-1{
-    player[iPlayer].configureTeam()
+for iPlayer in 0...game.playerNb-1{
+    game.configureTeam(player: game.player[iPlayer])
 }
 
