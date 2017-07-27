@@ -16,7 +16,7 @@ enum weaponType : Int{
     case attack, heal
 }
 
-// CLASSE
+// Character class
 class Character {
     var name : String
     var life : Int
@@ -27,26 +27,24 @@ class Character {
         self.type = type
         self.name = name
         
+        // Define feature according to the type of character
         switch type {
         case .fighter:
             self.life = 100
             self.weapon = Weapon(type: .attack, damage: 10)
-            
         case .mage:
             self.life = 50
             self.weapon = Weapon(type: .attack, damage: 20)
-            
         case .colossus:
             self.life = 200
             self.weapon = Weapon(type: .attack, damage: 5)
-            
         case .dwarf:
             self.life = 40
             self.weapon = Weapon(type: .attack, damage: 30)
         }
     }
 }
-
+// Weapon class
 class Weapon{
     var damage : Int
     var type : weaponType
@@ -56,7 +54,7 @@ class Weapon{
         self.type = type
     }
 }
-
+// Player class
 class Player{
     var name : String
     var characters : [Character] = []
@@ -92,6 +90,7 @@ class Player{
         print("\n")
     }
     
+    // choice the type of the character
     private func choiceCharacterType() -> Bool{
         var characterTypeOk = false
         // Wait the entered value
@@ -115,21 +114,35 @@ class Player{
                 print("Veuillez entrer un numéro valide")
             }
         }
-        
         return characterTypeOk
     }
     
+    // Choice the name of the character
     private func choiceCharacterName() -> Bool{
         var characterNameOk = false
+        var i = 0
         
         while characterNameOk == false{
             // Wait the entered value
             if let response = readLine(){
                 if response.characters.count > 0{
-                    // Change the character name by the name entered
-                    self.characters[self.characters.count-1].name = response
-                    // function Ok
-                    characterNameOk = true
+                    // check if the name is already use
+                    while i < self.characters.count{
+                        if (self.characters[i].name == response){
+                            print("Le nom est déjà utilisé, veuillez entrer un autre nom")
+                            // do not continue
+                            break
+                        }else{
+                            i += 1
+                        }
+                    }
+                    // Check if the loop do not have error
+                    if (i == self.characters.count){
+                        // Change the character name by the name entered
+                        self.characters[self.characters.count-1].name = response
+                        // function is a success
+                        characterNameOk = true
+                    }
                 }else{
                     print("Veuillez entrer un nom valide (minimum 1 charactères)")
                 }
@@ -138,6 +151,7 @@ class Player{
         return characterNameOk
     }
     
+    // Check if the entered value is an integer value
     private func isStringAnInt(string: String) -> Bool {
         return Int(string) != nil
     }
