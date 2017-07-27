@@ -19,33 +19,47 @@ class Game{
     
     init(playerNb: Int){
         self.playerNb = playerNb
-        self.player.append(Player(name: "Antoine"))
-        self.player.append(Player(name: "Kevin"))
-        
-        // to delete
-        self.player[0].characters.append(Character(type: .colossus, name:"tank 1"))
-        self.player[0].characters.append(Character(type: .mage, name:"heal 1"))
-        self.player[0].characters.append(Character(type: .dwarf, name:"nain 1"))
-        self.player[1].characters.append(Character(type: .colossus, name:"tank 2"))
-        self.player[1].characters.append(Character(type: .mage, name:"heal 2"))
-        self.player[1].characters.append(Character(type: .dwarf, name:"nain 2"))
     }
     
     // Starting the game
     public func playGame(){
-        while self.player[0].characters.count
+        while self.player[0].checkCharactersAlive() && self.player[1].checkCharactersAlive() {
+            var iPlayer = 0
+            while true{
+                // select the character that makes the action
+                let characterSelection = selectedCharacter(player : self.player[iPlayer])
+                if characterSelection != nil{
+                    // select the action type
+                    let actionSelection = selectedAction(player : self.player[iPlayer])
+                    if actionSelection != nil{
+                        // select the target of the action
+                        let targetSelection = selectedTarget(player : self.player[iPlayer])
+                        if targetSelection != nil{
+                            if executeAction(selection: characterSelection!, target: targetSelection!, type: actionSelection!){
+                                iPlayer += 1
+                            }
+                        }
+                    }
+                    
+                }
+            }
+        }
     }
-    // The player select who use
-    private func selectedCharacter(){
-        
+    // the player select who use
+    private func selectedCharacter(player : Player) -> Character? {
+        return nil
     }
     // the player select the action to do
-    private func selectedAction(){
-        
+    private func selectedAction(player : Player) -> actionType?{
+        return nil
     }
     // the player select the target
-    private func selectedTarget(){
-        
+    private func selectedTarget(player : Player) -> Character? {
+        return nil
+    }
+    // execute the action to the target
+    private func executeAction(selection : Character, target : Character, type : actionType) -> Bool{
+        return true
     }
     // Configure the team of the player
     public func configureTeam(player : Player) {
