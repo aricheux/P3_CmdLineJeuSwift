@@ -15,7 +15,18 @@ enum characterType : Int {
 // Character class
 class Character {
     var name : String
-    var life : Int
+    var life : Int{
+        didSet{
+            if life < 0{
+                life = 0
+            }
+            if oldValue > life{
+                print("\(name) perd \(oldValue - life) point de vie")
+            }else{
+                print("\(name) gagne \(life - oldValue) point de vie")
+            }
+        }
+    }
     var type : characterType
     var weapon : Weapon
     
@@ -27,16 +38,16 @@ class Character {
         switch type {
         case .fighter:
             self.life = 100
-            self.weapon = Weapon(type: .damage, damage: 10, healing : 0)
+            self.weapon = Weapon(type: .damage, damageValue: 10, healValue : 0)
         case .mage:
             self.life = 50
-            self.weapon = Weapon(type: .healing, damage: 20, healing : 20)
+            self.weapon = Weapon(type: .healing, damageValue: 20, healValue : 20)
         case .colossus:
             self.life = 200
-            self.weapon = Weapon(type: .damage, damage: 5, healing : 0)
+            self.weapon = Weapon(type: .damage, damageValue: 5, healValue : 0)
         case .dwarf:
             self.life = 40
-            self.weapon = Weapon(type: .damage, damage: 30, healing : 0)
+            self.weapon = Weapon(type: .damage, damageValue: 30, healValue : 0)
         }
     }
 }

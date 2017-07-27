@@ -14,13 +14,13 @@ enum weaponType : Int{
 
 // Weapon class
 class Weapon{
-    var damage : Int
-    var healing : Int
+    var damageValue : Int
+    var healValue : Int
     var type : weaponType
     
-    init(type: weaponType, damage: Int, healing: Int) {
-        self.damage = damage
+    init(type: weaponType, damageValue: Int, healValue: Int) {
+        self.damageValue = damageValue
         self.type = type
-        self.healing = healing
+        self.healValue = healValue
     }
 }

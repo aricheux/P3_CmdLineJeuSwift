@@ -47,9 +47,9 @@ class Game{
         while self.player[0].checkCharactersAlive() && self.player[1].checkCharactersAlive() {
             switch stepAction {
             case .selectedCharacter:
+                showTeamStatus(player: self.player[iPlayer])
                 characterSelection = selectedCharacter(player : self.player[iPlayer])
                 if characterSelection != nil{
-                    print("ok_1")
                     // Next step
                     stepAction = .selectedAction
                 }
@@ -61,7 +61,6 @@ class Game{
                     actionSelection = .attack
                 }
                 if actionSelection != nil{
-                    print("ok_2")
                     // Next step
                     stepAction = .selectedTarget
                 }
@@ -72,25 +71,24 @@ class Game{
                 }else{
                     iAdversary = 0
                 }
-                
                 targetSelection = selectedTarget(player : self.player[iPlayer], adversary : self.player[iAdversary], action : actionSelection!)
                 if targetSelection != nil{
-                    print("ok_3")
                     // Next step
                     stepAction = .executeAction
                 }
             case .executeAction:
-                if executeAction(selection: characterSelection!, target: targetSelection!, type: actionSelection!){
-                    // Next player
-                    iPlayer += 1
-                    if iPlayer > self.playerNumber-1{
-                        iPlayer = 0
-                    }
-                    // Next step
-                    stepAction = .selectedCharacter
+                executeAction(selection: characterSelection!, target: targetSelection!, action: actionSelection!)
+                // Next player
+                iPlayer += 1
+                if iPlayer > self.playerNumber-1{
+                    iPlayer = 0
                 }
+                print("")
+                // Next step
+                stepAction = .selectedCharacter
             }
         }
+        print("La partie est finie")
     }
     // the player select who use
     private func selectedCharacter(player : Player) -> Character? {
@@ -100,11 +98,11 @@ class Game{
         for i in 0...player.characters.count-1{
             print("\(i+1).\(player.characters[i].name)",terminator: " ")
         }
-        // Wait the entered value
+        // Recovery the value entered by the player
         let numSelection = selectionFromUser()
         if numSelection > 0 {
             switch numSelection {
-            case 1...player.characters.count-1:
+            case 1...charactersMax:
                 selectedCharacter = player.characters[numSelection-1]
             default:
                 print("Veuillez entrer un numéro valide")
@@ -117,7 +115,7 @@ class Game{
         var selectedAction : actionType?
         
         print("Que voulez vous faire : 1. Attaquer 2.Soigner")
-        // Wait the entered value
+        // Recovery the value entered by the player
         let numSelection = selectionFromUser()
         if numSelection > 0 {
             switch numSelection {
@@ -146,23 +144,37 @@ class Game{
                 print("\(i+1).\(player.characters[i].name)",terminator: " ")
             }
         }
-        // Wait the entered value
+        // Recovery the value entered by the player
         let numSelection = selectionFromUser()
         if numSelection > 0 {
-            // Define the target according to the action and selection
-            switch action {
-            case .attack:
-                targetCharacter = adversary.characters[numSelection-1]
-                
-            case .heal:
-                targetCharacter = player.characters[numSelection-1]
+            switch numSelection {
+            case 1...charactersMax:
+                // Define the target according to the action and selection
+                switch action {
+                case .attack:
+                    targetCharacter = adversary.characters[numSelection-1]
+                    
+                case .heal:
+                    targetCharacter = player.characters[numSelection-1]
+                }
+            default:
+                print("Veuillez entrer un numéro valide")
             }
+            
         }
         return targetCharacter
     }
     // execute the action to the target
-    private func executeAction(selection : Character, target : Character, type : actionType) -> Bool{
-        return true
+    private func executeAction(selection : Character, target : Character, action : actionType){
+        switch action {
+        case .attack:
+            print("\(selection.name) attaque \(target.name)")
+            target.life -= selection.weapon.damageValue
+            
+        case .heal:
+            print("\(selection.name) soigne \(target.name)")
+            target.life += selection.weapon.healValue
+        }
     }
     // Configure the team of the player
     public func configureTeam(player : Player) {
@@ -186,7 +198,7 @@ class Game{
     // Choice the type of the character
     private func choiceCharacterType(player : Player) -> Bool{
         var characterTypeOk = false
-        // Wait the entered value
+        // Recovery the value entered by the player
         let numSelection = selectionFromUser()
         if numSelection > 0 {
             // Add a new character according to the input value
@@ -232,16 +244,13 @@ class Game{
         print("Equipe de \(player.name) : ")
         for i in 0...player.characters.count-1{
             print("\(player.characters[i].name) : \(player.characters[i].type)"
-                + " vie(\(player.characters[i].life))",terminator: " ")
-            switch player.characters[i].type{
-            case .mage:
-                print("soin(\(player.characters[i].weapon.healing))")
-            default:
-                print("dégat(\(player.characters[i].weapon.damage))")
+                + " vie(\(player.characters[i].life))"
+                + " dégat(\(player.characters[i].weapon.damageValue))", terminator: "")
+            if player.characters[i].type == .mage{
+                print(" soin(\(player.characters[i].weapon.healValue))", terminator: "")
             }
-            
+            print("")
         }
-        print("\n")
     }
     // Check if the name entered is already existing
     private func checkNameExisting(name : String) -> Bool{
@@ -271,7 +280,7 @@ class Game{
         return Int(string) != nil
     }
     
-    // Return the number of selection
+    // Recovery the value entered by the player
     private func selectionFromUser() -> Int{
         var numSelection = 0
         // Wait the entered value

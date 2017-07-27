@@ -13,13 +13,12 @@ game.player.append(Player(name: "Antoine"))
 game.player.append(Player(name: "Kevin"))
 
 // to delete
-
-game.player[0].characters.append(Character(type: .colossus, name:"tank 1"))
-game.player[0].characters.append(Character(type: .mage, name:"heal 1"))
-game.player[0].characters.append(Character(type: .dwarf, name:"nain 1"))
-game.player[1].characters.append(Character(type: .colossus, name:"tank 2"))
-game.player[1].characters.append(Character(type: .mage, name:"heal 2"))
-game.player[1].characters.append(Character(type: .dwarf, name:"nain 2"))
+game.player[0].characters.append(Character(type: .colossus, name:"tank_1"))
+game.player[0].characters.append(Character(type: .mage, name:"heal_1"))
+game.player[0].characters.append(Character(type: .dwarf, name:"nain_1"))
+game.player[1].characters.append(Character(type: .colossus, name:"tank_2"))
+game.player[1].characters.append(Character(type: .mage, name:"heal_2"))
+game.player[1].characters.append(Character(type: .dwarf, name:"nain_2"))
 
 game.playGame()
 
