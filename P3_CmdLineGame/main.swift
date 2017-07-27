@@ -31,27 +31,29 @@ class Character {
         switch type {
         case .fighter:
             self.life = 100
-            self.weapon = Weapon(type: .attack, damage: 10)
+            self.weapon = Weapon(type: .attack, damage: 10, healing : 0)
         case .mage:
             self.life = 50
-            self.weapon = Weapon(type: .attack, damage: 20)
+            self.weapon = Weapon(type: .attack, damage: 0, healing : 20)
         case .colossus:
             self.life = 200
-            self.weapon = Weapon(type: .attack, damage: 5)
+            self.weapon = Weapon(type: .attack, damage: 5, healing : 0)
         case .dwarf:
             self.life = 40
-            self.weapon = Weapon(type: .attack, damage: 30)
+            self.weapon = Weapon(type: .attack, damage: 30, healing : 0)
         }
     }
 }
 // Weapon class
 class Weapon{
     var damage : Int
+    var healing : Int
     var type : weaponType
     
-    init(type: weaponType, damage: Int) {
+    init(type: weaponType, damage: Int, healing: Int) {
         self.damage = damage
         self.type = type
+        self.healing = healing
     }
 }
 // Player class
@@ -125,7 +127,7 @@ class Game{
     // Choice the name of the character
     private func choiceCharacterName(player : Player) -> Bool{
         var characterNameOk = false
-
+        
         while characterNameOk == false{
             // Wait the entered value
             if let response = readLine(){
@@ -151,9 +153,15 @@ class Game{
     private func showTeamStatus(player : Player) {
         print("Equipe de \(player.name) : ")
         for i in 0...player.characters.count-1{
-            print("\(player.characters[i].name) -> \(player.characters[i].type)"
-                + " vie(\(player.characters[i].life))"
-                + " dégat(\(player.characters[i].weapon.damage))")
+            print("\(player.characters[i].name) : \(player.characters[i].type)"
+                + " vie(\(player.characters[i].life))",terminator: " ")
+            switch player.characters[i].type{
+            case .mage:
+                print("soin(\(player.characters[i].weapon.healing))")
+            default:
+                print("dégat(\(player.characters[i].weapon.damage))")
+            }
+            
         }
         print("\n")
     }
