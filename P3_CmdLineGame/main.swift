@@ -64,7 +64,8 @@ class Player{
         self.name = name
     }
     
-    public func choiceCharacter() {
+    // Configure the team of the player
+    public func configureTeam() {
         print("********** A toi \(self.name), choisit ton équipe **********")
         var iCharacters = 0
         //
@@ -80,14 +81,7 @@ class Player{
                 }
             }
         }
-    }
-    
-    public func showTeamStatus() {
-        print("Equipe de \(self.name) : ")
-        for i in 0...self.characters.count-1{
-            print("\(i+1).\(self.characters[i].type) (vie:\(self.characters[i].life) / dégat:\(self.characters[i].weapon.damage))")
-        }
-        print("\n")
+        showTeamStatus()
     }
     
     // choice the type of the character
@@ -151,18 +145,26 @@ class Player{
         return characterNameOk
     }
     
+    // Show the actual status of the team
+    private func showTeamStatus() {
+        print("Equipe de \(self.name) : ")
+        for i in 0...self.characters.count-1{
+            print("\(self.characters[i].name) -> \(self.characters[i].type) vie(\(self.characters[i].life)) dégat(\(self.characters[i].weapon.damage))")
+        }
+        print("\n")
+    }
+    
     // Check if the entered value is an integer value
     private func isStringAnInt(string: String) -> Bool {
         return Int(string) != nil
     }
 }
-
-let player_1 = Player(name: "Antoine")
-let player_2 = Player(name: "Kevin")
+// Create all player
+let playerInGame = 2
+let player = [Player(name: "Antoine"),Player(name: "Kevin")]
 
 //
-player_1.choiceCharacter()
-player_1.showTeamStatus()
-//
-player_2.choiceCharacter()
-//player_2.showTeamStatus()
+for iPlayer in 0...playerInGame-1{
+    player[iPlayer].configureTeam()
+}
+
