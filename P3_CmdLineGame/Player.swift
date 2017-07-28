@@ -17,7 +17,7 @@ class Player{
         self.name = name
         self.characters = []
     }
-    
+    // Check if characters are alive to continu the game
     public func checkCharactersAlive() -> Bool{
         var indexDead : Int?
         var characterAlive = false

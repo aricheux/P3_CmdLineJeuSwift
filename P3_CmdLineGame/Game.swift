@@ -29,8 +29,9 @@ enum enum_stepAction{
 }
 
 class Game{
-    var playerNumber : Int
     let charactersMax = 3
+    var numberOfTurn = 0
+    var playerNumber : Int
     var player : [Player] = []
     
     init(playerNumber: Int){
@@ -86,13 +87,20 @@ class Game{
                 iPlayer += 1
                 if iPlayer > self.playerNumber-1{
                     iPlayer = 0
+                    // Increase counter turn
+                    self.numberOfTurn += 1
                 }
                 print("")
                 // Next step
                 stepAction = .selectedCharacter
             }
         }
-        print("La partie est finie")
+        if self.player[0].checkCharactersAlive(){
+            print("\(self.player[0].name) à gagné la partie", terminator : " ")
+        }else{
+            print("\(self.player[1].name) à gagné la partie", terminator : " ")
+        }
+        print("en \(self.numberOfTurn) tours de combat")
     }
     // the player select who use
     private func selectedCharacter(player : Player) -> Character? {
