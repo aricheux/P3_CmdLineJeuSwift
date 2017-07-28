@@ -323,21 +323,21 @@ class Game{
         // Generate a random type
         randowWeapon.type = weaponType(rawValue: Int(arc4random_uniform(1)))!
         // Generate a random damage or healing
-        print("Une boite d'arme apparait !!! (type :\(randowWeapon.type)", terminator: "")
+        print("\(selection.name) ouvre une boite d'arme (type:\(randowWeapon.type)", terminator: " ")
         switch randowWeapon.type {
         case .damage:
-            randowWeapon.damageValue = Int(arc4random_uniform(30)) + 10
-            print(" dégat:\(randowWeapon.damageValue))")
+            randowWeapon.damageValue = Int(arc4random_uniform(20)) + 30
+            print("dégat:\(randowWeapon.damageValue))")
         case .healing:
-            randowWeapon.healValue = Int(arc4random_uniform(20)) + 10
-            print(" soin:\(randowWeapon.healValue))")
+            randowWeapon.healValue = Int(arc4random_uniform(10)) + 20
+            print("soin:\(randowWeapon.healValue))")
         }
         // Check if the weapon type is compatible with the character
         if selection.weapon.type == randowWeapon.type {
             selection.weapon = randowWeapon
-            print("\(selection.name) s'équipe de la nouvelle arme !!")
+            print("\(selection.name) s'équipe de cette nouvelle arme")
         }else{
-            print("Arme non compatible avec ce type de personnage")
+            print("\(selection.name) ne peux pas s'équiper de cette arme")
         }
     }
 }
