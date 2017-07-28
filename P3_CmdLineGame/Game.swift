@@ -8,16 +8,6 @@
 
 import Foundation
 
-extension Int {
-    var boolValue: Bool {
-        if self == 0 {
-            return false
-        } else {
-            return true
-        }
-    }
-}
-
 enum actionType : Int{
     case attack, heal
     
@@ -25,7 +15,7 @@ enum actionType : Int{
 }
 
 enum enum_stepAction{
-    case selectedCharacter, selectedAction, selectedTarget, executeAction
+    case selectedCharacter, weaponBox, selectedAction, selectedTarget, executeAction
 }
 
 class Game{
@@ -53,9 +43,22 @@ class Game{
                 showTeamStatus(player: self.player[iPlayer])
                 characterSelection = selectedCharacter(player : self.player[iPlayer])
                 if characterSelection != nil{
-                    // Next step
-                    stepAction = .selectedAction
+                    // Generate a randow box
+                    let randomBoxValue : Int = Int(arc4random_uniform(3))
+                    // Open the weapon box if it's the good number
+                    if randomBoxValue == 0{
+                        // Next step
+                        stepAction = .weaponBox
+                    }else{
+                        // Next step
+                        stepAction = .selectedAction
+                    }
                 }
+            case .weaponBox:
+                // Open the weapon box
+                openWeaponBox(selection: characterSelection!)
+                // Next step
+                stepAction = .selectedAction
             case .selectedAction:
                 // Choice the action only if it's a mage
                 if characterSelection!.type == .mage {
@@ -101,6 +104,25 @@ class Game{
             print("\(self.player[1].name) à gagné la partie", terminator : " ")
         }
         print("en \(self.numberOfTurn) tours de combat")
+    }
+    // Configure the team of the player
+    public func configureTeam(player : Player) {
+        print("****** A toi \(player.name), choisit tes 3 personnages ******")
+        var iCharacters = 0
+        // Create character of the team
+        while (iCharacters < charactersMax) {
+            // Choice the type of the character
+            print("Type du personnage \(iCharacters+1) : 1.Combattant 2.Mage 3.Colosse 4.Nain")
+            if choiceCharacterType(player: player){
+                // Choice the name of the character
+                print("Entrer le nom du personnage \(iCharacters+1) :")
+                if choiceCharacterName(player: player){
+                    // Next character
+                    iCharacters += 1
+                }
+            }
+        }
+        showTeamStatus(player: player)
     }
     // the player select who use
     private func selectedCharacter(player : Player) -> Character? {
@@ -195,25 +217,6 @@ class Game{
             target.life += selection.weapon.healValue
         }
     }
-    // Configure the team of the player
-    public func configureTeam(player : Player) {
-        print("****** A toi \(player.name), choisit tes 3 personnages ******")
-        var iCharacters = 0
-        // Create character of the team
-        while (iCharacters < charactersMax) {
-            // Choice the type of the character
-            print("Type du personnage \(iCharacters+1) : 1.Combattant 2.Mage 3.Colosse 4.Nain")
-            if choiceCharacterType(player: player){
-                // Choice the name of the character
-                print("Entrer le nom du personnage \(iCharacters+1) :")
-                if choiceCharacterName(player: player){
-                    // Next character
-                    iCharacters += 1
-                }
-            }
-        }
-        showTeamStatus(player: player)
-    }
     // Choice the type of the character
     private func choiceCharacterType(player : Player) -> Bool{
         var characterTypeOk = false
@@ -298,7 +301,6 @@ class Game{
     private func isStringAnInt(string: String) -> Bool {
         return Int(string) != nil
     }
-    
     // Recovery the value entered by the player
     private func selectionFromUser() -> Int{
         var numSelection = 0
@@ -314,5 +316,28 @@ class Game{
         }
         return numSelection
     }
-    
+    // Open the weapon box and change the weapon if it's possible
+    private func openWeaponBox(selection : Character){
+        // Create a random weapon
+        let randowWeapon = Weapon()
+        // Generate a random type
+        randowWeapon.type = weaponType(rawValue: Int(arc4random_uniform(1)))!
+        // Generate a random damage or healing
+        print("Une boite d'arme apparait !!! (type :\(randowWeapon.type)", terminator: "")
+        switch randowWeapon.type {
+        case .damage:
+            randowWeapon.damageValue = Int(arc4random_uniform(30)) + 10
+            print(" dégat:\(randowWeapon.damageValue))")
+        case .healing:
+            randowWeapon.healValue = Int(arc4random_uniform(20)) + 10
+            print(" soin:\(randowWeapon.healValue))")
+        }
+        // Check if the weapon type is compatible with the character
+        if selection.weapon.type == randowWeapon.type {
+            selection.weapon = randowWeapon
+            print("\(selection.name) s'équipe de la nouvelle arme !!")
+        }else{
+            print("Arme non compatible avec ce type de personnage")
+        }
+    }
 }

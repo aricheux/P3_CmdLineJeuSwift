@@ -18,6 +18,12 @@ class Weapon{
     var healValue : Int
     var type : weaponType
     
+    init(){
+        self.damageValue = 0
+        self.type = .damage
+        self.healValue = 0
+    }
+    
     init(type: weaponType, damageValue: Int, healValue: Int) {
         self.damageValue = damageValue
         self.type = type
