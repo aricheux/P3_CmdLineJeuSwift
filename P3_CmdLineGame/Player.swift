@@ -8,7 +8,7 @@
 
 import Foundation
 
-// Player class
+// Define the Player class
 class Player{
     // Define the name of the player
     var name : String
@@ -20,7 +20,7 @@ class Player{
         self.name = name
         self.characters = []
     }
-    // Check if characters are alive to continu the game
+    // Check if characters are alive
     public func checkCharactersAlive() -> Bool{
         var indexDead : Int?
         var characterAlive = false

@@ -13,13 +13,13 @@ enum weaponType : Int{
     case damage, healing
 }
 
-// Weapon class
+// Define the Weapon class
 class Weapon{
     // Define the damage value for each attaque
     var damageValue : Int
     // Define the healing value for each heal
     var healValue : Int
-    // Define the type of the weapon (Attack or healing)
+    // Define the type of the weapon
     var type : weaponType
     
     // Initializes the new instance with defaut value

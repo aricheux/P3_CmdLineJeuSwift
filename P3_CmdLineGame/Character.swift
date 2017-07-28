@@ -13,7 +13,14 @@ enum characterType : Int {
     case fighter, mage, colossus, dwarf
 }
 
-// Character class
+// Define all action type available
+enum actionType : Int{
+    case attack, heal
+    
+    static var count: Int { return actionType.heal.hashValue + 1}
+}
+
+// Define the Character class
 class Character {
     // Define the name of the character
     var name : String
@@ -36,7 +43,7 @@ class Character {
             }
         }
     }
-    // Define the type of the character (fighter, mage, dwarf, etc..)
+    // Define the type of the character
     var type : characterType
     // Defines the weapon of the charact
     var weapon : Weapon

@@ -8,16 +8,12 @@
 
 import Foundation
 
-enum actionType : Int{
-    case attack, heal
-    
-    static var count: Int { return actionType.heal.hashValue + 1}
-}
-
+// Define the step of the game
 enum enum_stepAction{
     case selectedCharacter, weaponBox, selectedAction, selectedTarget, executeAction
 }
 
+// Define the game class
 class Game{
     // Maximum number of character per player
     let charactersMax = 3
