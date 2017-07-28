@@ -10,9 +10,12 @@ import Foundation
 
 // Player class
 class Player{
+    // Define the name of the player
     var name : String
+    // Instance of character class
     var characters : [Character]
     
+    // Initializes the new instance with property
     init(name : String){
         self.name = name
         self.characters = []
@@ -29,11 +32,11 @@ class Player{
                 indexDead = i
             }
         }
-        // Check if a character is dead
+        // Check if a character is dead during the turn
         if indexDead != nil{
+            // Remove the character to the game
             self.characters.remove(at: indexDead!)
         }
-        
         return characterAlive
     }
     

@@ -8,18 +8,23 @@
 
 import Foundation
 
+// Define all character type available
 enum characterType : Int {
     case fighter, mage, colossus, dwarf
 }
 
 // Character class
 class Character {
+    // Define the name of the character
     var name : String
+    // Define the number of life remaining
     var life : Int{
         didSet{
+            // Limited to 0
             if life < 0{
                 life = 0
             }
+            // Check if the character have more or less life
             if oldValue > life{
                 print("\(name) perd \(oldValue - life) point de vie")
             }else{
@@ -31,10 +36,12 @@ class Character {
             }
         }
     }
-
+    // Define the type of the character (fighter, mage, dwarf, etc..)
     var type : characterType
+    // Defines the weapon of the charact
     var weapon : Weapon
     
+    // Initializes the new instance with all property
     init(type: characterType, name :String){
         self.type = type
         self.name = name

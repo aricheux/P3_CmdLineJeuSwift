@@ -19,16 +19,21 @@ enum enum_stepAction{
 }
 
 class Game{
+    // Maximum number of character per player
     let charactersMax = 3
+    // Number of turn per game
     var numberOfTurn = 0
+    // Number of player in game
     var playerNumber : Int
+    // Instance of player class
     var player : [Player] = []
     
+    // Initializes the new instance with property
     init(playerNumber: Int){
         self.playerNumber = playerNumber
     }
     
-    // Starting the game
+    // Play the game
     public func playGame(){
         var iPlayer = 0
         var stepAction : enum_stepAction = .selectedCharacter
@@ -326,9 +331,11 @@ class Game{
         print("\(selection.name) ouvre une boite d'arme (type:\(randowWeapon.type)", terminator: " ")
         switch randowWeapon.type {
         case .damage:
+            // Generate a randow damage value for the new weapon
             randowWeapon.damageValue = Int(arc4random_uniform(20)) + 30
             print("dégat:\(randowWeapon.damageValue))")
         case .healing:
+            // Generate a randow heal value for the new weapon
             randowWeapon.healValue = Int(arc4random_uniform(10)) + 20
             print("soin:\(randowWeapon.healValue))")
         }
