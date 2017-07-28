@@ -113,7 +113,10 @@ class Game{
         // Create character of the team
         while (iCharacters < charactersMax) {
             // Choice the type of the character
-            print("Type du personnage \(iCharacters+1) : 1.Combattant 2.Mage 3.Colosse 4.Nain")
+            print("Personnage \(iCharacters+1):", terminator:" ")
+            for i in 0...characterType.count-1{
+                print("\(i+1).\(characterType(rawValue:i)!)",terminator: " ")
+            }
             if choiceCharacterType(player: player){
                 // Choice the name of the character
                 print("Entrer le nom du personnage \(iCharacters+1) :")
@@ -123,7 +126,6 @@ class Game{
                 }
             }
         }
-        showTeamStatus(player: player)
     }
     // the player select who use
     private func selectedCharacter(player : Player) -> Character? {

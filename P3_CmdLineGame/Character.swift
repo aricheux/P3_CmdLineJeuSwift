@@ -11,6 +11,8 @@ import Foundation
 // Define all character type available
 enum characterType : Int {
     case fighter, mage, colossus, dwarf
+    
+    static var count: Int { return characterType.dwarf.hashValue + 1}
 }
 
 // Define all action type available

@@ -24,7 +24,6 @@ class Player{
     public func checkCharactersAlive() -> Bool{
         var indexDead : Int?
         var characterAlive = false
-        
         for i in 0...self.characters.count-1{
             if self.characters[i].life > 0{
                 characterAlive = true
