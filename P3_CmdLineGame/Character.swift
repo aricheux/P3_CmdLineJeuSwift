@@ -25,8 +25,13 @@ class Character {
             }else{
                 print("\(name) gagne \(life - oldValue) point de vie")
             }
+            // status to know if the character is dead
+            if life == 0{
+                print("\(name) est mort..")
+            }
         }
     }
+
     var type : characterType
     var weapon : Weapon
     
@@ -40,13 +45,13 @@ class Character {
             self.life = 100
             self.weapon = Weapon(type: .damage, damageValue: 10, healValue : 0)
         case .mage:
-            self.life = 50
+            self.life = 40
             self.weapon = Weapon(type: .healing, damageValue: 20, healValue : 20)
         case .colossus:
-            self.life = 200
+            self.life = 150
             self.weapon = Weapon(type: .damage, damageValue: 5, healValue : 0)
         case .dwarf:
-            self.life = 40
+            self.life = 50
             self.weapon = Weapon(type: .damage, damageValue: 30, healValue : 0)
         }
     }

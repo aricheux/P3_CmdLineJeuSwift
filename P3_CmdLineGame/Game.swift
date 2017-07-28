@@ -20,6 +20,8 @@ extension Int {
 
 enum actionType : Int{
     case attack, heal
+    
+    static var count: Int { return actionType.heal.hashValue + 1}
 }
 
 enum enum_stepAction{
@@ -104,7 +106,7 @@ class Game{
         let numSelection = selectionFromUser()
         if numSelection > 0 {
             switch numSelection {
-            case 1...charactersMax:
+            case 1...player.characters.count:
                 selectedCharacter = player.characters[numSelection-1]
             default:
                 print("Veuillez entrer un numéro valide")
@@ -121,7 +123,7 @@ class Game{
         let numSelection = selectionFromUser()
         if numSelection > 0 {
             switch numSelection {
-            case 1...2:
+            case 1...actionType.count:
                 selectedAction = actionType(rawValue: numSelection-1)
             default:
                 print("Veuillez entrer un numéro valide")
@@ -137,20 +139,27 @@ class Game{
         case .attack:
             print("Qui attaquer :",terminator: " ")
             for i in 0...adversary.characters.count-1{
-                print("\(i+1).\(adversary.characters[i].name)",terminator: " ")
+                print("\(i+1).\(adversary.characters[i].name) (\(adversary.characters[i].life))",terminator: " ")
             }
             
         case .heal:
             print("Qui soigner :",terminator: " ")
             for i in 0...player.characters.count-1{
-                print("\(i+1).\(player.characters[i].name)",terminator: " ")
+                print("\(i+1).\(player.characters[i].name) (\(player.characters[i].life))",terminator: " ")
             }
+        }
+        // Define limite for the switch below, because each team don't have the same character
+        var limitSwitch : Int
+        if action == .attack{
+            limitSwitch = adversary.characters.count
+        }else{
+            limitSwitch = player.characters.count
         }
         // Recovery the value entered by the player
         let numSelection = selectionFromUser()
         if numSelection > 0 {
             switch numSelection {
-            case 1...charactersMax:
+            case 1...limitSwitch:
                 // Define the target according to the action and selection
                 switch action {
                 case .attack:
@@ -245,7 +254,7 @@ class Game{
     private func showTeamStatus(player : Player) {
         print("Equipe de \(player.name) : ")
         for i in 0...player.characters.count-1{
-            print("\(player.characters[i].name) : \(player.characters[i].type)"
+            print("\(player.characters[i].name) :"
                 + " vie(\(player.characters[i].life))"
                 + " dégat(\(player.characters[i].weapon.damageValue))", terminator: "")
             if player.characters[i].type == .mage{
