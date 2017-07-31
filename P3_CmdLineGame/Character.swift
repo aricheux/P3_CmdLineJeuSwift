@@ -9,49 +9,54 @@
 import Foundation
 
 // Define all character type available
-enum characterType : Int {
-    case fighter, mage, colossus, dwarf
+enum CharacterType: Int {
+    case fighter
+    case mage
+    case colossus
+    case dwarf
     
-    static var count: Int { return characterType.dwarf.hashValue + 1}
+    static var count: Int { return CharacterType.dwarf.hashValue + 1 }
 }
 
 // Define all action type available
-enum actionType : Int{
-    case attack, heal
+enum actionType : Int {
+    case attack
+    case heal
     
-    static var count: Int { return actionType.heal.hashValue + 1}
+    static var count: Int { return actionType.heal.hashValue + 1 }
 }
 
 // Define the Character class
 class Character {
     // Define the name of the character
-    var name : String
+    var name: String
+    
     // Define the number of life remaining
-    var life : Int{
-        didSet{
+    var life: Int {
+        didSet {
             // Limited to 0
             if life < 0{
                 life = 0
             }
             // Check if the character have more or less life
-            if oldValue > life{
+            if oldValue > life {
                 print("\(name) perd \(oldValue - life) point de vie")
-            }else{
+            } else {
                 print("\(name) gagne \(life - oldValue) point de vie")
             }
             // status to know if the character is dead
-            if life == 0{
+            if life == 0 {
                 print("\(name) est mort..")
             }
         }
     }
     // Define the type of the character
-    var type : characterType
+    var type: CharacterType
     // Defines the weapon of the charact
-    var weapon : Weapon
+    var weapon: Weapon
     
     // Initializes the new instance with all property
-    init(type: characterType, name :String){
+    init(type: CharacterType, name :String) {
         self.type = type
         self.name = name
         
