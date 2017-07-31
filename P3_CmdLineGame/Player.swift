@@ -8,6 +8,12 @@
 
 import Foundation
 
+extension String {
+    var isStringAnInt: Bool {
+        return Int(self) != nil
+    }
+}
+
 // Define the Player class
 class Player {
     // Define the name of the player
