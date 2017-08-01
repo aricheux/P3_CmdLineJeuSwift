@@ -9,9 +9,9 @@
 import Foundation
 
 // Define all weapon type available
-enum WeaponType: Int{
-    case damage
-    case healing
+enum WeaponType: Int {
+    case Damage
+    case Healing
 }
 
 // Define the Weapon class
@@ -27,7 +27,7 @@ class Weapon {
     var type: WeaponType
         
     // Initializes the new instance with property
-    init(type: WeaponType = .damage, damageValue: Int = 0, healValue: Int = 0) {
+    init(type: WeaponType = .Damage, damageValue: Int = 0, healValue: Int = 0) {
         self.damageValue = damageValue
         self.type = type
         self.healValue = healValue

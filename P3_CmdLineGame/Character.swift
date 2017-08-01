@@ -10,70 +10,98 @@ import Foundation
 
 // Define all character type available
 enum CharacterType: Int {
-    case fighter
-    case mage
-    case colossus
-    case dwarf
-    
-    static var count: Int { return CharacterType.dwarf.hashValue + 1 }
+    case Fighter
+    case Mage
+    case Colossus
+    case Dwarf
 }
 
 // Define all action type available
-enum actionType : Int {
-    case attack
-    case heal
-    
-    static var count: Int { return actionType.heal.hashValue + 1 }
+enum actionType: Int {
+    case Attack
+    case Heal
 }
 
 // Define the Character class
 class Character {
     // Define the name of the character
-    var name: String
+    var name: String = "Character"
     
     // Define the number of life remaining
     var life: Int {
         didSet {
-            // Limited to 0
-            if life < 0{
+            if life < 0 {
                 life = 0
             }
-            // Check if the character have more or less life
             if oldValue > life {
                 print("\(name) perd \(oldValue - life) point de vie")
             } else {
                 print("\(name) gagne \(life - oldValue) point de vie")
             }
-            // status to know if the character is dead
-            if life == 0 {
+            if (life == 0) {
                 print("\(name) est mort..")
             }
         }
     }
     // Define the type of the character
     var type: CharacterType
+    
     // Defines the weapon of the charact
     var weapon: Weapon
     
     // Initializes the new instance with all property
-    init(type: CharacterType, name :String) {
+    init(type: CharacterType) {
         self.type = type
-        self.name = name
         
-        // Define feature according to the type of character
         switch type {
-        case .fighter:
+        case .Fighter:
             self.life = 100
-            self.weapon = Weapon(type: .damage, damageValue: 10, healValue : 0)
-        case .mage:
+            self.weapon = Weapon(type: .Damage, damageValue: 10, healValue : 20)
+        case .Mage:
             self.life = 40
-            self.weapon = Weapon(type: .healing, damageValue: 20, healValue : 20)
-        case .colossus:
+            self.weapon = Weapon(type: .Healing, damageValue: 20, healValue : 20)
+        case .Colossus:
             self.life = 150
-            self.weapon = Weapon(type: .damage, damageValue: 5, healValue : 0)
-        case .dwarf:
+            self.weapon = Weapon(type: .Damage, damageValue: 5, healValue : 0)
+        case .Dwarf:
             self.life = 50
-            self.weapon = Weapon(type: .damage, damageValue: 30, healValue : 0)
+            self.weapon = Weapon(type: .Damage, damageValue: 30, healValue : 0)
         }
+    }
+}
+
+// Class Fighter
+class Fighter: Character {
+    
+    // Initializes with special poperty
+    init() {
+        super .init(type: .Fighter)
+    }
+}
+
+// Class Mage
+class Mage: Character {
+    
+    // Initializes with special poperty
+    init() {
+        super .init(type: .Mage)
+    }
+}
+
+// Class Colossus
+class Colossus: Character {
+    
+    // Initializes with special poperty
+    init() {
+        super .init(type: .Colossus)
+    }
+}
+
+// Class Dwarf
+class Dwarf: Character {
+    
+    // Initializes with special poperty
+    init() {
+        super .init(type: .Dwarf)
     }
 }
