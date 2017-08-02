@@ -14,6 +14,12 @@ extension String {
     }
 }
 
+// Define all action type available
+enum actionType: Int {
+    case Attack
+    case Heal
+}
+
 // Define the Player class
 class Player {
     // Define the name of the player
@@ -84,7 +90,7 @@ class Player {
         print("A toi \(self.name), choisit un personnage dans ton équipe ")
         
         for i in 0...self.characters.count-1 {
-            print("[\(i+1)] ----- \(self.characters[i].name) :"
+            print("[\(i+1)] ----- \(self.characters[i].name) (\(self.characters[i].type)):"
                 + " vie(\(self.characters[i].life))"
                 + " dégat(\(self.characters[i].weapon.damageValue))", terminator: "")
             if self.characters[i].type == .Mage {
@@ -117,10 +123,8 @@ class Player {
         var selectedAction: actionType?
         
         if charactType == .Mage {
-            let numSelection = selectionFromUser()
-            
             print("Que voulez vous faire : [1]---- Attaquer [2]---- Soigner")
-            
+            let numSelection = selectionFromUser()
             if numSelection > 0 {
                 if numSelection >= 1 && numSelection <= self.characters.count {
                     selectedAction = actionType(rawValue: numSelection-1)

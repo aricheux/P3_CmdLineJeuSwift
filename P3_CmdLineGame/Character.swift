@@ -16,16 +16,13 @@ enum CharacterType: Int {
     case Dwarf
 }
 
-// Define all action type available
-enum actionType: Int {
-    case Attack
-    case Heal
-}
-
 // Define the Character class
 class Character {
     // Define the name of the character
     var name: String = "Character"
+    
+    // Define the number of armor remaining
+    var armor : Int
     
     // Define the number of life remaining
     var life: Int {
@@ -46,12 +43,13 @@ class Character {
     // Define the type of the character
     var type: CharacterType
     
-    // Defines the weapon of the charact
+    // Defines the weapon of the character
     var weapon: Weapon
     
-    // Initializes the new instance with all property
+    // Initializes the new instance
     init(type: CharacterType) {
         self.type = type
+        self.armor = 0
         
         switch type {
         case .Fighter:

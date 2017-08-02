@@ -8,6 +8,12 @@
 
 import Foundation
 
+enum BoxType {
+    case WeaponBox
+    case CareBox
+    case ArmorBox
+}
+
 // Define the game class
 class Game {
     // Maximum number of character per player
@@ -43,7 +49,12 @@ class Game {
         print("Avant de commencer la partie, vous allez devoir composer votre équipe.")
         print("Chaque équipe sera composé de 3 personnages.")
         print("Chaque joueur devra définir le type et le nom de chaque personnage.")
-        print("Pour définir le type, vous devrez taper son numéro dans la liste.")
+        print("Pour définir le type, vous devrez taper le numéro du type dans la liste qui apparaitra.")
+        print("Voici les différents types de personnage disponible et leurs caractéristiques:")
+        print("---- Figther : Dégat(10) Vie(100)")
+        print("---- Mage : Dégat(20) Vie(100) Soin(20)")
+        print("---- Colossus : Dégat(5) Vie(150)")
+        print("---- Dwarf : Dégat(30) Vie(50)")
         print("")
     }
     
@@ -69,6 +80,7 @@ class Game {
             }
         }
     }
+    
     // Play the game
     public func playGame() {
         var iAdversary = 1
