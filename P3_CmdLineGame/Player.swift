@@ -92,6 +92,7 @@ class Player {
         for i in 0...self.characters.count-1 {
             print("[\(i+1)] ----- \(self.characters[i].name) (\(self.characters[i].type)):"
                 + " vie(\(self.characters[i].life))"
+                + " armure(\(self.characters[i].armor))"
                 + " dégat(\(self.characters[i].weapon.damageValue))", terminator: "")
             if self.characters[i].type == .Mage {
                 print(" soin(\(self.characters[i].weapon.healValue))", terminator: "")
@@ -104,6 +105,7 @@ class Player {
             if numSelection >= 1 && numSelection <= self.characters.count {
                 print("Tu as choisi \(self.characters[numSelection-1].name) :"
                     + " vie(\(self.characters[numSelection-1].life))"
+                    + " armure(\(self.characters[numSelection-1].armor))"
                     + " dégat(\(self.characters[numSelection-1].weapon.damageValue))", terminator: "")
                 if self.characters[numSelection-1].type == .Mage{
                     print(" soin(\(self.characters[numSelection-1].weapon.healValue))", terminator: "")
@@ -150,6 +152,7 @@ class Player {
             for i in 0...adversary.characters.count-1 {
                 print("[\(i+1)] ----- \(adversary.characters[i].name) :"
                     + " vie(\(adversary.characters[i].life))"
+                    + " armure(\(adversary.characters[i].armor))"
                     + " dégat(\(adversary.characters[i].weapon.damageValue))", terminator: "")
                 if adversary.characters[i].type == .Mage {
                     print(" soin(\(adversary.characters[i].weapon.healValue))", terminator: "")
@@ -162,6 +165,7 @@ class Player {
             for i in 0...self.characters.count-1 {
                 print("[\(i+1)] ----- \(self.characters[i].name) :"
                     + " vie(\(self.characters[i].life))"
+                    + " armure(\(self.characters[i].armor))"
                     + " dégat(\(self.characters[i].weapon.damageValue))", terminator: "")
                 if self.characters[i].type == .Mage {
                     print(" soin(\(self.characters[i].weapon.healValue))", terminator: "")

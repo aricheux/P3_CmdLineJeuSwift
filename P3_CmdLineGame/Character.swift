@@ -22,7 +22,15 @@ class Character {
     var name: String = "Character"
     
     // Define the number of armor remaining
-    var armor : Int
+    var armor: Int {
+        didSet{
+            if oldValue > armor {
+                print("\(name) perd \(oldValue - armor) points d'armure")
+            } else {
+                print("\(name) gagne \(armor - oldValue) points d'armure")
+            }
+        }
+    }
     
     // Define the number of life remaining
     var life: Int {
@@ -31,9 +39,18 @@ class Character {
                 life = 0
             }
             if oldValue > life {
-                print("\(name) perd \(oldValue - life) point de vie")
+                if armor >= (oldValue - life) {
+                    armor -= (oldValue - life)
+                    life = oldValue
+                } else if armor > 0 {
+                    life = life + armor
+                    armor -= armor
+                    print("\(name) perd \(oldValue - life) points de vie")
+                } else if armor == 0 {
+                    print("\(name) perd \(oldValue - life) points de vie")
+                }
             } else {
-                print("\(name) gagne \(life - oldValue) point de vie")
+                print("\(name) gagne \(life - oldValue) points de vie")
             }
             if (life == 0) {
                 print("\(name) est mort..")
