@@ -79,25 +79,23 @@ class Game {
         while self.player[0].checkCharactersAlive() && self.player[1].checkCharactersAlive() {
             
             if let characterSelection = self.player[iPlayer].selectCharacter() {
-                let randomBoxValue: Int = Int(arc4random_uniform(5))
-                let randomBoxType = BoxType(rawValue: Int(arc4random_uniform(2)))!
-                
-                if randomBoxValue == 0 {
-                    switch randomBoxType {
-                    case .WeaponBox:
-                        weaponBox(selection: characterSelection)
-                    case .CareBox:
-                        careBox(selection: characterSelection)
-                    case .ArmorBox:
-                        armorBox(selection: characterSelection)
+                let randomBoxValue: Int = Int(arc4random_uniform(4))
+                if let randomBoxType = BoxType(rawValue: Int(arc4random_uniform(3))) {
+                    if randomBoxValue == 0 {
+                        switch randomBoxType {
+                        case .WeaponBox:
+                            weaponBox(selection: characterSelection)
+                        case .CareBox:
+                            careBox(selection: characterSelection)
+                        case .ArmorBox:
+                            armorBox(selection: characterSelection)
+                        }
                     }
                 }
                 
                 if let actionSelection = self.player[iPlayer].selectedAction(charactType: characterSelection.type) {
                     
-                    if let targetSelection = self.player[iPlayer].selectedTarget(adversary : self.player[iAdversary], action : actionSelection) {
-                        
-                        executeAction(selection: characterSelection, target: targetSelection, action: actionSelection)
+                    if self.player[iPlayer].selectedTargetAndAction(selection: characterSelection, adversary: self.player[iAdversary], action : actionSelection) {
                         
                         iPlayer += 1
                         if iPlayer > self.playerNumber-1 {
@@ -145,29 +143,34 @@ class Game {
     }
     
     // Open the weapon box and change the weapon if it's possible
-    private func weaponBox(selection : Character) {
-        let randowWeapon = Weapon()
+    private func weaponBox(selection: Character) {
+        let randomWeapon = Weapon()
         
-        randowWeapon.type = WeaponType(rawValue: Int(arc4random_uniform(1)))!
-        print("****** Une boite d'arme apparait ***** ")
-        print("\(selection.name) ouvre la boite d'arme (type:\(randowWeapon.type)", terminator: " ")
-        switch randowWeapon.type {
-        case .Damage:
-            randowWeapon.damageValue = Int(arc4random_uniform(20)) + 30
-            print("dégat:\(randowWeapon.damageValue))")
-        case .Healing:
-            randowWeapon.healValue = Int(arc4random_uniform(10)) + 20
-            print("soin:\(randowWeapon.healValue))")
+        if let randomWeaponType = WeaponType(rawValue: Int(arc4random_uniform(1))) {
+            randomWeapon.type = randomWeaponType
+            print("****** Une boite d'arme apparait ***** ")
+            print("\(selection.name) ouvre la boite d'arme (type:\(randomWeapon.type)", terminator: " ")
+            
+            switch randomWeapon.type {
+            case .Damage:
+                randomWeapon.damageValue = Int(arc4random_uniform(20)) + 30
+                print("dégat:\(randomWeapon.damageValue))")
+            case .Healing:
+                randomWeapon.healValue = Int(arc4random_uniform(10)) + 20
+                print("soin:\(randomWeapon.healValue))")
+            }
+            
+            if selection.weapon.type == randomWeapon.type {
+                selection.weapon = randomWeapon
+                print("\(selection.name) s'équipe de la nouvelle arme")
+            } else {
+                print("\(selection.name) ne peux pas s'équiper de cette arme")
+            }
+            
+            print("")
         }
-        if selection.weapon.type == randowWeapon.type {
-            selection.weapon = randowWeapon
-            print("\(selection.name) s'équipe de la nouvelle arme")
-        } else {
-            print("\(selection.name) ne peux pas s'équiper de cette arme")
-        }
-        print("")
     }
-
+    
     // Open the care box and add the life to the character
     private func careBox(selection: Character) {
         let careBoxValue = Int(arc4random_uniform(20)) + 10
@@ -177,30 +180,17 @@ class Game {
         selection.life += careBoxValue
         print("")
     }
-
+    
     // Open the armor box and add the armor to the character
     private func armorBox(selection: Character) {
         let armorBoxValue = Int(arc4random_uniform(20)) + 10
-
+        
         print("****** Une boite d'armure apparait ***** ")
         print("\(selection.name) ouvre la boite d'armure (armure:\(armorBoxValue))")
         selection.armor += armorBoxValue
         print("")
     }
-    
-    // execute the action to the target
-    private func executeAction(selection: Character, target: Character, action: actionType) {
-        switch action {
-        case .Attack:
-            print("\(selection.name) attaque \(target.name)")
-            target.life -= selection.weapon.damageValue
-            
-        case .Heal:
-            print("\(selection.name) soigne \(target.name)")
-            target.life += selection.weapon.healValue
-        }
-    }
-    
+
     // Choice the name of the character
     private func choiceCharacterName(player: Player) -> Bool {
         var characterNameOk = false

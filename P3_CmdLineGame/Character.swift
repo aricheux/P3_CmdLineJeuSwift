@@ -35,9 +35,6 @@ class Character {
     // Define the number of life remaining
     var life: Int {
         didSet {
-            if life < 0 {
-                life = 0
-            }
             if oldValue > life {
                 if armor >= (oldValue - life) {
                     armor -= (oldValue - life)
@@ -45,8 +42,11 @@ class Character {
                 } else if armor > 0 {
                     life = life + armor
                     armor -= armor
-                    print("\(name) perd \(oldValue - life) points de vie")
-                } else if armor == 0 {
+                }
+                if life < 0 {
+                    life = 0
+                }
+                if oldValue > life {
                     print("\(name) perd \(oldValue - life) points de vie")
                 }
             } else {
@@ -66,7 +66,7 @@ class Character {
     // Initializes the new instance
     init(type: CharacterType) {
         self.type = type
-        self.armor = 0
+        self.armor = 15
         
         switch type {
         case .Fighter:

@@ -38,11 +38,13 @@ class Player {
         var indexDead: Int?
         var characterAlive = false
         
-        for i in 0...self.characters.count-1 {
-            if self.characters[i].life > 0 {
-                characterAlive = true
-            } else {
-                indexDead = i
+        if self.characters.count > 0 {
+            for i in 0...self.characters.count-1 {
+                if self.characters[i].life > 0 {
+                    characterAlive = true
+                } else {
+                    indexDead = i
+                }
             }
         }
         
@@ -142,8 +144,8 @@ class Player {
     }
     
     // the player select the target
-    public func selectedTarget(adversary: Player, action: actionType) -> Character? {
-        var targetCharacter: Character?
+    public func selectedTargetAndAction(selection: Character, adversary: Player, action: actionType) -> Bool {
+        var functionFinished = false
         var characCount: Int
         
         switch action {
@@ -185,17 +187,20 @@ class Player {
             if numSelection >= 1 && numSelection <= characCount {
                 switch action {
                 case .Attack:
-                    targetCharacter = adversary.characters[numSelection-1]
+                    print("\(selection.name) attaque \(adversary.characters[numSelection-1].name)")
+                    adversary.characters[numSelection-1].life -= selection.weapon.damageValue
                     
                 case .Heal:
-                    targetCharacter = self.characters[numSelection-1]
+                    print("\(selection.name) soigne \(self.characters[numSelection-1].name)")
+                    self.characters[numSelection-1].life += selection.weapon.healValue
                 }
+                functionFinished = true
             } else {
                 print("Veuillez entrer un numéro valide")
             }
         }
         
-        return targetCharacter
+        return functionFinished
     }
     
     // Recovery the value entered by the player
@@ -204,7 +209,9 @@ class Player {
         
         if let response = readLine() {
             if response.isStringAnInt {
-                numSelection = Int(response)!
+                if let numResponse = Int(response){
+                    numSelection = numResponse
+                }
             }else{
                 print("Veuillez entrer un numéro valide")
             }
