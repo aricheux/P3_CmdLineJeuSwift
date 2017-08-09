@@ -8,25 +8,23 @@
 import Foundation
 
 // Create the game
-let game = Game(playerNumber: 2)
-game.player.append(Player(name: "Antoine"))
-game.player.append(Player(name: "Kevin"))
+let game = Game()
 
 //game.configureTeam(player: game.player[0])
 
 // ******* to delete ********
-game.player[0].characters.append(Fighter())
-game.player[0].characters[0].name = "CombattantOne"
-game.player[0].characters.append(Mage())
-game.player[0].characters[1].name = "MageOne"
-game.player[0].characters.append(Dwarf())
-game.player[0].characters[2].name = "NainOne"
-game.player[1].characters.append(Fighter())
-game.player[1].characters[0].name = "CombattantTwo"
-game.player[1].characters.append(Mage())
-game.player[1].characters[1].name = "MageTwo"
-game.player[1].characters.append(Dwarf())
-game.player[1].characters[2].name = "NainTwo"
+game.player1.characters.append(Fighter())
+game.player1.characters[0].name = "CombattantOne"
+game.player1.characters.append(Mage())
+game.player1.characters[1].name = "MageOne"
+game.player1.characters.append(Dwarf())
+game.player1.characters[2].name = "NainOne"
+game.player2.characters.append(Fighter())
+game.player2.characters[0].name = "CombattantTwo"
+game.player2.characters.append(Mage())
+game.player2.characters[1].name = "MageTwo"
+game.player2.characters.append(Dwarf())
+game.player2.characters[2].name = "NainTwo"
 // **************************
 
 game.playGame()

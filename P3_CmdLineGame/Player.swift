@@ -8,14 +8,8 @@
 
 import Foundation
 
-extension String {
-    var isStringAnInt: Bool {
-        return Int(self) != nil
-    }
-}
-
 // Define all action type available
-enum actionType: Int {
+enum ActionType: Int {
     case Attack
     case Heal
 }
@@ -24,11 +18,16 @@ enum actionType: Int {
 class Player {
     // Define the name of the player
     var name: String
+    
     // Instance of character class
     var characters: [Character]
     
+    // Boolean to know characters are alive on the player's team
+    var isAlive: Bool
+    
     // Initializes the new instance with property
     init(name: String) {
+        self.isAlive = true
         self.name = name
         self.characters = []
     }
@@ -56,168 +55,80 @@ class Player {
     }
     
     // Choice the type of the character
-    public func choiceCharacterType() -> Bool {
-        var characterTypeOk = false
-        let numSelection = selectionFromUser()
+    public func choiceCharacterType() {
         
-        if numSelection > 0 {
-            if numSelection >= 1 && numSelection <= 4 {
-                if let charactType = CharacterType(rawValue: numSelection-1) {
-                    print("Vous avez choisi le type \(charactType)")
-                    
-                    switch charactType {
-                    case .Fighter:
-                        self.characters.append(Fighter())
-                    case .Mage:
-                        self.characters.append(Mage())
-                    case .Colossus:
-                        self.characters.append(Colossus())
-                    case .Dwarf:
-                        self.characters.append(Dwarf())
-                    }
-                    characterTypeOk = true
-                }
-            } else {
-                print("Veuillez entrer un numéro valide")
-            }
+        switch Global.input() {
+        case 1:
+            self.characters.append(Fighter())
+        case 2:
+            self.characters.append(Mage())
+        case 3:
+            self.characters.append(Colossus())
+        case 4:
+            self.characters.append(Dwarf())
+        default:
+            print("Veuillez entrer un numéro valide")
+            choiceCharacterType()
         }
         
-        return characterTypeOk
+        print("Vous avez choisi le type \(self.characters[self.characters.count].typeName)")
+
     }
     
     // the player select who use
-    public func selectCharacter() -> Character? {
-        var selectedCharacter: Character?
+    public func selectCharacter() -> Character {
+        var selectedCharacter = Character()
         
-        print("A toi \(self.name), choisit un personnage dans ton équipe ")
+        print("A toi \(self.name), choisit un personnage dans ton équipe")
         
-        for i in 0...self.characters.count-1 {
-            print("[\(i+1)] ----- \(self.characters[i].name) (\(self.characters[i].type)):"
-                + " vie(\(self.characters[i].life))"
-                + " armure(\(self.characters[i].armor))"
-                + " dégat(\(self.characters[i].weapon.damageValue))", terminator: "")
-            if self.characters[i].type == .Mage {
-                print(" soin(\(self.characters[i].weapon.healValue))", terminator: "")
-            }
+        self.introduceTeam()
+        
+        let selectionNumber = Global.input()
+        
+        if selectionNumber >= 1 && selectionNumber <= self.characters.count {
+            selectedCharacter = self.characters[selectionNumber - 1]
+            print("Tu as choisi", terminator: " ")
+            selectedCharacter.introduceYou()
             print("")
-        }
-        
-        let numSelection = selectionFromUser()
-        if numSelection > 0 {
-            if numSelection >= 1 && numSelection <= self.characters.count {
-                print("Tu as choisi \(self.characters[numSelection-1].name) :"
-                    + " vie(\(self.characters[numSelection-1].life))"
-                    + " armure(\(self.characters[numSelection-1].armor))"
-                    + " dégat(\(self.characters[numSelection-1].weapon.damageValue))", terminator: "")
-                if self.characters[numSelection-1].type == .Mage{
-                    print(" soin(\(self.characters[numSelection-1].weapon.healValue))", terminator: "")
-                }
-                print("\n")
-                selectedCharacter = self.characters[numSelection-1]
-            } else {
-                print("Veuillez entrer un numéro valide")
-            }
+        } else {
+            print("Veuillez entrer un numéro valide")
+            let _ = selectCharacter()
         }
         
         return selectedCharacter
     }
     
-    // the player select the action to do
-    public func selectedAction(charactType : CharacterType) -> actionType? {
-        var selectedAction: actionType?
-        
-        if charactType == .Mage {
-            print("Que voulez vous faire : [1]---- Attaquer [2]---- Soigner")
-            let numSelection = selectionFromUser()
-            if numSelection > 0 {
-                if numSelection >= 1 && numSelection <= self.characters.count {
-                    selectedAction = actionType(rawValue: numSelection-1)
-                } else {
-                    print("Veuillez entrer un numéro valide")
-                }
-            }
-        } else {
-            selectedAction = .Attack
-        }
-        
-        return selectedAction
-    }
-    
     // the player select the target
-    public func selectedTargetAndAction(selection: Character, adversary: Player, action: actionType) -> Bool {
-        var functionFinished = false
-        var characCount: Int
+    public func selectTarget(selection: Character, adversary: Player) -> Character {
+        var selectedTarget = Character()
+        var selectedTeam = Player(name: "")
         
-        switch action {
-        case .Attack:
-            print("Choisissez qui attaquer dans l'équipe de \(adversary.name) :")
-            for i in 0...adversary.characters.count-1 {
-                print("[\(i+1)] ----- \(adversary.characters[i].name) :"
-                    + " vie(\(adversary.characters[i].life))"
-                    + " armure(\(adversary.characters[i].armor))"
-                    + " dégat(\(adversary.characters[i].weapon.damageValue))", terminator: "")
-                if adversary.characters[i].type == .Mage {
-                    print(" soin(\(adversary.characters[i].weapon.healValue))", terminator: "")
-                }
-                print("")
-            }
-            
-        case .Heal:
-            print("Choisissez qui soigner dans votre équipe :")
-            for i in 0...self.characters.count-1 {
-                print("[\(i+1)] ----- \(self.characters[i].name) :"
-                    + " vie(\(self.characters[i].life))"
-                    + " armure(\(self.characters[i].armor))"
-                    + " dégat(\(self.characters[i].weapon.damageValue))", terminator: "")
-                if self.characters[i].type == .Mage {
-                    print(" soin(\(self.characters[i].weapon.healValue))", terminator: "")
-                }
-                print("")
-            }
-        }
-        
-        if action == .Attack {
-            characCount = adversary.characters.count
+        if selection is Mage {
+            print("Choisit un personnage à soigner dans ton équipe")
+            selectedTeam = self
         } else {
-            characCount = self.characters.count
+            print("Choisit un personnage à attaquer dans l'équipe adverse")
+            selectedTeam = adversary
         }
         
-        let numSelection = selectionFromUser()
-        if numSelection > 0 {
-            if numSelection >= 1 && numSelection <= characCount {
-                switch action {
-                case .Attack:
-                    print("\(selection.name) attaque \(adversary.characters[numSelection-1].name)")
-                    adversary.characters[numSelection-1].life -= selection.weapon.damageValue
-                    
-                case .Heal:
-                    print("\(selection.name) soigne \(self.characters[numSelection-1].name)")
-                    self.characters[numSelection-1].life += selection.weapon.healValue
-                }
-                functionFinished = true
-            } else {
-                print("Veuillez entrer un numéro valide")
-            }
+        selectedTeam.introduceTeam()
+        
+        let selectionNumber = Global.input()
+        if selectionNumber >= 1 && selectionNumber <= selectedTeam.characters.count {
+            selectedTarget = selectedTeam.characters[selectionNumber - 1]
+        } else {
+            print("Veuillez entrer un numéro valide")
+            let _ = selectTarget(selection: selection, adversary: adversary)
         }
         
-        return functionFinished
+        return selectedTarget
     }
     
-    // Recovery the value entered by the player
-    private func selectionFromUser() -> Int {
-        var numSelection = 0
-        
-        if let response = readLine() {
-            if response.isStringAnInt {
-                if let numResponse = Int(response){
-                    numSelection = numResponse
-                }
-            }else{
-                print("Veuillez entrer un numéro valide")
-            }
+    private func introduceTeam() {
+        for i in 0...self.characters.count - 1 {
+            print("[\(i+1)]", terminator: " ")
+            self.characters[i].introduceYou()
         }
-        
-        return numSelection
+        print("")
     }
-    
 }

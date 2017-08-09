@@ -22,99 +22,31 @@ class Game {
     // Number of turn per game
     var numberOfTurn = 0
     
-    // Number of player in game
-    var playerNumber: Int
-    
     // Instance of player class
-    var player: [Player] = []
+    var player1 = Player(name: "Antoine")
+    var player2 = Player(name: "Computer")
     
-    // Initializes the new instance with property
-    init(playerNumber: Int) {
-        self.playerNumber = playerNumber
-    }
-    
-    // Configure the team of the player
-    public func configureTeam(player: Player) {
-        var iCharacters = 0
-        
-        // Explain how compose the team
-        presentationTeam()
-        
-        while (iCharacters < charactersMax) {
-            print("\(player.name), choisit le type du personnage \(iCharacters+1): ", terminator: "")
-            
-            for i in 0...3 {
-                if let characType = CharacterType(rawValue:i) {
-                    print("[\(i+1)] -- \(characType)",terminator: " ")
-                }
-            }
-            
-            if player.choiceCharacterType() {
-                print("Entrer le nom du personnage \(iCharacters+1): ")
-                if choiceCharacterName(player: player) {
-                    // Next character
-                    iCharacters += 1
-                }
-            }
-        }
-    }
-    
-    // Play the game
     public func playGame() {
-        var iAdversary = 1
-        var iPlayer = 0 {
-            didSet {
-                if iPlayer == 0 {
-                    iAdversary = 1
-                } else {
-                    iAdversary = 0
-                }
-            }
-        }
+        var currentPlayer = player1
+        var currentAdversary = player2
+        var selectedTarget: Character
         
-        // Presentation of the game step
+        /*presentationTeam()
+        chooseTeam()*/
         presentationGame()
         
-        // Run the game until one of player have no character alive
-        while self.player[0].checkCharactersAlive() && self.player[1].checkCharactersAlive() {
-            
-            if let characterSelection = self.player[iPlayer].selectCharacter() {
-                let randomBoxValue: Int = Int(arc4random_uniform(4))
-                if let randomBoxType = BoxType(rawValue: Int(arc4random_uniform(3))) {
-                    if randomBoxValue == 0 {
-                        switch randomBoxType {
-                        case .WeaponBox:
-                            weaponBox(selection: characterSelection)
-                        case .CareBox:
-                            careBox(selection: characterSelection)
-                        case .ArmorBox:
-                            armorBox(selection: characterSelection)
-                        }
-                    }
-                }
-                
-                if let actionSelection = self.player[iPlayer].selectedAction(charactType: characterSelection.type) {
-                    
-                    if self.player[iPlayer].selectedTargetAndAction(selection: characterSelection, adversary: self.player[iAdversary], action : actionSelection) {
-                        
-                        iPlayer += 1
-                        if iPlayer > self.playerNumber-1 {
-                            iPlayer = 0
-                            // Increase counter turn
-                            self.numberOfTurn += 1
-                        }
-                        
-                        print("")
-                    }
-                }
-            }
+        while currentPlayer.isAlive {
+            let selectedCharacter = currentPlayer.selectCharacter()
+            boxAppear(character: selectedCharacter)
+            selectedCharacter.chooseAction()
+            selectedTarget = currentPlayer.selectTarget(selection: selectedCharacter, adversary: currentAdversary)
+            selectedCharacter.doAction(target: selectedTarget)
+            updateTeam()
+            currentPlayer = switchPlayer(player: currentPlayer)
+            currentAdversary = switchPlayer(player: currentAdversary)
         }
-        if self.player[0].checkCharactersAlive() {
-            print("\(self.player[0].name) à gagné la partie", terminator : " ")
-        } else {
-            print("\(self.player[1].name) à gagné la partie", terminator : " ")
-        }
-        print("en \(self.numberOfTurn) tours de combat")
+        currentPlayer = switchPlayer(player: currentPlayer)
+        displayWinner(winner: currentPlayer)
     }
     
     // Presentation to configure the team
@@ -131,6 +63,34 @@ class Game {
         print("")
     }
     
+    private func chooseTeam() {
+        configureTeam(player: player1)
+        configureTeam(player: player2)
+    }
+    
+    // Configure the team of the player
+    public func configureTeam(player: Player) {
+        let iCharacters = 0
+        
+        while (iCharacters < charactersMax) {
+            print("\(player.name), choisit le type du personnage \(iCharacters+1): ", terminator: "")
+            
+            for i in 0...3 {
+                if let characType = CharacterType(rawValue:i) {
+                    print("[\(i+1)] -- \(characType)",terminator: " ")
+                }
+            }
+            
+            /*if player.choiceCharacterType() {
+             print("Entrer le nom du personnage \(iCharacters+1): ")
+             if choiceCharacterName(player: player) {
+             // Next character
+             iCharacters += 1
+             }
+             }*/
+        }
+    }
+    
     // Presentation of the game
     public func presentationGame() {
         print("La partie va commencer, voici son deroulement :")
@@ -140,6 +100,21 @@ class Game {
         print("Si vous soignez, vous devrez choisir un personnage dans votre équipe à soigner.")
         print("Pour choisir un personnage, vous devrez taper son numéro dans la liste qui apparaitra.")
         print("")
+    }
+    
+    private func boxAppear(character: Character) {
+        let randomBoxValue = Int(arc4random_uniform(4))
+        
+        if randomBoxValue == 0 {
+            switch BoxType(rawValue: Int(arc4random_uniform(3)))! {
+            case .WeaponBox:
+                weaponBox(selection: character)
+            case .CareBox:
+                careBox(selection: character)
+            case .ArmorBox:
+                armorBox(selection: character)
+            }
+        }
     }
     
     // Open the weapon box and change the weapon if it's possible
@@ -166,9 +141,8 @@ class Game {
             } else {
                 print("\(selection.name) ne peux pas s'équiper de cette arme")
             }
-            
-            print("")
         }
+        print("")
     }
     
     // Open the care box and add the life to the character
@@ -178,7 +152,6 @@ class Game {
         print("****** Une boite de soin apparait *****")
         print("\(selection.name) ouvre la boite de soin (soin:\(careBoxValue))")
         selection.life += careBoxValue
-        print("")
     }
     
     // Open the armor box and add the armor to the character
@@ -188,9 +161,27 @@ class Game {
         print("****** Une boite d'armure apparait ***** ")
         print("\(selection.name) ouvre la boite d'armure (armure:\(armorBoxValue))")
         selection.armor += armorBoxValue
-        print("")
     }
-
+    
+    // Update all data on the team
+    private func updateTeam() {
+        
+    }
+    
+    // Switch the current player
+    private func switchPlayer(player: Player) -> Player {
+        if player.name == "Antoine" {
+            numberOfTurn += 1
+            return player2
+        }
+        return player1
+    }
+    
+    // Display the winner of the game
+    private func displayWinner(winner: Player) {
+        print("\(winner.name) gagne en \(numberOfTurn) tours de jeu")
+    }
+    
     // Choice the name of the character
     private func choiceCharacterName(player: Player) -> Bool {
         var characterNameOk = false
@@ -198,7 +189,7 @@ class Game {
         if let response = readLine() {
             if response.characters.count > 0 && (checkNameExisting(name: response) == false){
                 player.characters[player.characters.count-1].name = response
-                print("Personnage 1 : \(response) \(player.characters[player.characters.count-1].type)")
+                print("Personnage 1 : \(response) \(player.characters[player.characters.count-1].typeName)")
                 print("")
                 characterNameOk = true
             } else {
@@ -212,22 +203,19 @@ class Game {
     
     // Check if the name entered is already existing
     private func checkNameExisting(name: String) -> Bool {
-        var iCharacter = 0
-        var nameExisting = false
+        var iCharacter: Int
         
-        for iPlayer in 0...playerNumber-1 {
-            if nameExisting == false {
-                while iCharacter < player[iPlayer].characters.count {
-                    if (player[iPlayer].characters[iCharacter].name == name) {
-                        nameExisting = true
-                        break
-                    } else {
-                        iCharacter += 1
-                    }
+        for _ in 0...1 {
+            iCharacter = 0
+            while iCharacter < player1.characters.count {
+                if (player1.characters[iCharacter].name == name) {
+                    return true
+                } else {
+                    iCharacter += 1
                 }
             }
         }
         
-        return nameExisting
+        return false
     }
 }

@@ -14,8 +14,13 @@ class Fighter: Character {
     // Initializes with special poperty
     override init() {
         super .init()
-        self.type = .Fighter
+        self.typeName = "Combattant"
         self.life = 100
-        self.weapon = Weapon(type: .Damage, damageValue: 10, healValue : 20)
+        self.weapon = Weapon(type: .Damage, damageValue: 10)
+    }
+    
+    override func introduceYou() {
+        super.introduceYou()
+        print("dégat(\(self.weapon.damageValue))")
     }
 }

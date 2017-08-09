@@ -21,6 +21,9 @@ class Character {
     // Define the name of the character
     var name: String
     
+    // Define the name of the type
+    var typeName: String
+    
     // Define the number of armor remaining
     var armor: Int {
         didSet{
@@ -29,6 +32,7 @@ class Character {
             } else {
                 print("\(name) gagne \(armor - oldValue) points d'armure")
             }
+            print("")
         }
     }
     
@@ -36,29 +40,16 @@ class Character {
     var life: Int {
         didSet {
             if oldValue > life {
-                if armor >= (oldValue - life) {
-                    armor -= (oldValue - life)
-                    life = oldValue
-                } else if armor > 0 {
-                    life = life + armor
-                    armor -= armor
-                }
-                if life < 0 {
-                    life = 0
-                }
-                if oldValue > life {
-                    print("\(name) perd \(oldValue - life) points de vie")
-                }
+                print("\(name) perd \(oldValue - life) points de vie")
             } else {
                 print("\(name) gagne \(life - oldValue) points de vie")
             }
-            if (life == 0) {
+            if (life <= 0) {
                 print("\(name) est mort..")
             }
+            print("")
         }
     }
-    // Define the type of the character
-    var type: CharacterType
     
     // Defines the weapon of the character
     var weapon: Weapon
@@ -68,8 +59,26 @@ class Character {
         self.name = "Character"
         self.life = 100
         self.armor = 0
-        self.type = .Fighter
+        self.typeName = "Type"
         self.weapon = Weapon()
+    }
+    
+    func introduceYou() {
+        print("\(self.name) (\(self.typeName)):"
+            + " vie(\(self.life))"
+            + " armure(\(self.armor))", terminator: " ")
+    }
+    
+    func chooseAction() {
+        
+    }
+    
+    func doAction(target: Character) {
+        target.life -= self.weapon.damageValue + target.armor
+    }
+    
+    func receveDamage() {
+
     }
     
 }

@@ -14,8 +14,13 @@ class Colossus: Character {
     // Initializes with special poperty
     override init() {
         super .init()
-        self.type = .Colossus
+        self.typeName = "Colosse"
         self.life = 150
         self.weapon = Weapon(type: .Damage, damageValue: 5, healValue : 0)
+    }
+    
+    override func introduceYou() {
+        super.introduceYou()
+        print("dégat(\(self.weapon.damageValue))")
     }
 }

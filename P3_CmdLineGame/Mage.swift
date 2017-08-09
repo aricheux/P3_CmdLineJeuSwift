@@ -14,8 +14,18 @@ class Mage: Character {
     // Initializes with special poperty
     override init() {
         super .init()
-        self.type = .Mage
+        self.typeName = "Mage"
         self.life = 40
         self.weapon = Weapon(type: .Healing, damageValue: 20, healValue : 20)
     }
+    
+    override func introduceYou() {
+        super.introduceYou()
+        print("soin(\(self.weapon.healValue))")
+    }
+    
+    override func doAction(target: Character) {
+        target.life += self.weapon.healValue
+    }
+    
 }
