@@ -67,6 +67,12 @@ class Game {
     //
     private func chooseTeam() {
         configureTeam(player: player1)
+        /*player1.characters.append(Fighter())
+        player1.characters[0].name = "CombattantTwo"
+        player1.characters.append(Mage())
+        player1.characters[1].name = "MageTwo"
+        player1.characters.append(Dwarf())
+        player1.characters[2].name = "NainTwo"*/
         //configureTeam(player: player2)
         player2.characters.append(Fighter())
         player2.characters[0].name = "CombattantTwo"
@@ -117,7 +123,7 @@ class Game {
                 print("")
             } else {
                 print("Le nom est non valide ou déjà utilisé")
-                let _ = choiceCharacterName(player: player)
+                choiceCharacterName(player: player)
             }
         }
     }

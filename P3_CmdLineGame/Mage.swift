@@ -25,6 +25,7 @@ class Mage: Character {
     }
     
     override func doAction(target: Character) {
+        print("\(self.name) soigne \(target.name)")
         target.receveLife(life: self.weapon.healValue)
     }
     

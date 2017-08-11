@@ -41,6 +41,7 @@ class Character {
 
     // Execute the the action to the target
     public func doAction(target: Character) {
+        print("\(self.name) attaque \(target.name)")
         target.receveDamage(damage: self.weapon.damageValue)
     }
     

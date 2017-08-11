@@ -62,7 +62,7 @@ class Player {
             print("")
         } else {
             print("Veuillez entrer un numéro valide")
-            let _ = selectCharacter()
+            selectedCharacter = selectCharacter()
         }
         
         return selectedCharacter
@@ -88,7 +88,7 @@ class Player {
             selectedTarget = selectedPlayer.characters[selectionNumber - 1]
         } else {
             print("Veuillez entrer un numéro valide")
-            let _ = selectTarget(selection: selection, adversary: adversary)
+            selectedTarget = selectTarget(selection: selection, adversary: adversary)
         }
         
         return selectedTarget
