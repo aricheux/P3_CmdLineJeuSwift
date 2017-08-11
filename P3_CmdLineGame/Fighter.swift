@@ -19,6 +19,7 @@ class Fighter: Character {
         self.weapon = Weapon(type: .Damage, damageValue: 10)
     }
     
+    // Override the mother function to add the value of damage
     override func introduceYou() {
         super.introduceYou()
         print("dégat(\(self.weapon.damageValue))")

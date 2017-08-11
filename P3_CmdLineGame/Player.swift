@@ -8,12 +8,6 @@
 
 import Foundation
 
-// Define all action type available
-enum ActionType: Int {
-    case Attack
-    case Heal
-}
-
 // Define the Player class
 class Player {
     // Define the name of the player
@@ -22,7 +16,7 @@ class Player {
     // Instance of character class
     var characters: [Character]
     
-    // Boolean to know characters are alive on the player's team
+    // Boolean to know if characters are alive on the player's team
     var isAlive: Bool
     
     // Initializes the new instance with property
@@ -30,28 +24,6 @@ class Player {
         self.isAlive = true
         self.name = name
         self.characters = []
-    }
-    
-    // Check if characters are alive
-    public func checkCharactersAlive() -> Bool {
-        var indexDead: Int?
-        var characterAlive = false
-        
-        if self.characters.count > 0 {
-            for i in 0...self.characters.count-1 {
-                if self.characters[i].life > 0 {
-                    characterAlive = true
-                } else {
-                    indexDead = i
-                }
-            }
-        }
-        
-        if let newIndexDead = indexDead {
-            self.characters.remove(at: newIndexDead)
-        }
-        
-        return characterAlive
     }
     
     // Choice the type of the character
@@ -72,7 +44,6 @@ class Player {
         }
         
         print("Vous avez choisi le type \(self.characters[self.characters.count].typeName)")
-
     }
     
     // the player select who use
@@ -84,7 +55,6 @@ class Player {
         self.introduceTeam()
         
         let selectionNumber = Global.input()
-        
         if selectionNumber >= 1 && selectionNumber <= self.characters.count {
             selectedCharacter = self.characters[selectionNumber - 1]
             print("Tu as choisi", terminator: " ")
@@ -101,21 +71,21 @@ class Player {
     // the player select the target
     public func selectTarget(selection: Character, adversary: Player) -> Character {
         var selectedTarget = Character()
-        var selectedTeam = Player(name: "")
+        var selectedPlayer = Player(name: "")
         
         if selection is Mage {
             print("Choisit un personnage à soigner dans ton équipe")
-            selectedTeam = self
+            selectedPlayer = self
         } else {
             print("Choisit un personnage à attaquer dans l'équipe adverse")
-            selectedTeam = adversary
+            selectedPlayer = adversary
         }
         
-        selectedTeam.introduceTeam()
+        selectedPlayer.introduceTeam()
         
         let selectionNumber = Global.input()
-        if selectionNumber >= 1 && selectionNumber <= selectedTeam.characters.count {
-            selectedTarget = selectedTeam.characters[selectionNumber - 1]
+        if selectionNumber >= 1 && selectionNumber <= selectedPlayer.characters.count {
+            selectedTarget = selectedPlayer.characters[selectionNumber - 1]
         } else {
             print("Veuillez entrer un numéro valide")
             let _ = selectTarget(selection: selection, adversary: adversary)
@@ -124,6 +94,27 @@ class Player {
         return selectedTarget
     }
     
+    // Update of the team's character
+    public func updateTeam() {
+        var indexDead: Int?
+        isAlive = false
+        
+        for i in 0...self.characters.count-1 {
+            if self.characters[i].life == 0 {
+                print("\(self.characters[i].name) est mort..")
+                indexDead = i
+            } else {
+                isAlive = true
+            }
+        }
+        
+        if let newIndexDead = indexDead {
+            self.characters.remove(at: newIndexDead)
+        }
+        print("")
+    }
+    
+    // Introduce all character available in the team
     private func introduceTeam() {
         for i in 0...self.characters.count - 1 {
             print("[\(i+1)]", terminator: " ")

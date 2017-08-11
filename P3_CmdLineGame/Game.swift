@@ -26,22 +26,23 @@ class Game {
     var player1 = Player(name: "Antoine")
     var player2 = Player(name: "Computer")
     
+    // Loop of the game
     public func playGame() {
         var currentPlayer = player1
         var currentAdversary = player2
+        var selectedCharacter: Character
         var selectedTarget: Character
         
-        /*presentationTeam()
-        chooseTeam()*/
+        howChooseTeam()
+        chooseTeam()
         presentationGame()
         
         while currentPlayer.isAlive {
-            let selectedCharacter = currentPlayer.selectCharacter()
+            selectedCharacter = currentPlayer.selectCharacter()
             boxAppear(character: selectedCharacter)
-            selectedCharacter.chooseAction()
             selectedTarget = currentPlayer.selectTarget(selection: selectedCharacter, adversary: currentAdversary)
             selectedCharacter.doAction(target: selectedTarget)
-            updateTeam()
+            currentAdversary.updateTeam()
             currentPlayer = switchPlayer(player: currentPlayer)
             currentAdversary = switchPlayer(player: currentAdversary)
         }
@@ -50,45 +51,93 @@ class Game {
     }
     
     // Presentation to configure the team
-    private func presentationTeam() {
+    private func howChooseTeam() {
         print("Avant de commencer la partie, vous allez devoir composer votre équipe.")
         print("Chaque équipe sera composé de 3 personnages.")
         print("Chaque joueur devra définir le type et le nom de chaque personnage.")
         print("Pour définir le type, vous devrez taper le numéro du type dans la liste qui apparaitra.")
         print("Voici les différents types de personnage disponible et leurs caractéristiques:")
-        print("---- Figther : Dégat(10) Vie(100)")
-        print("---- Mage : Dégat(20) Vie(100) Soin(20)")
-        print("---- Colossus : Dégat(5) Vie(150)")
-        print("---- Dwarf : Dégat(30) Vie(50)")
+        print("---- Combattant : Vie(100) Dégat(10)")
+        print("---- Mage : Vie(100) Soin(20)")
+        print("---- Colosse : Vie(150) Dégat(5)")
+        print("---- Nain : Vie(50) Dégat(30)")
         print("")
     }
     
+    //
     private func chooseTeam() {
         configureTeam(player: player1)
-        configureTeam(player: player2)
+        //configureTeam(player: player2)
+        player2.characters.append(Fighter())
+        player2.characters[0].name = "CombattantTwo"
+        player2.characters.append(Mage())
+        player2.characters[1].name = "MageTwo"
+        player2.characters.append(Dwarf())
+        player2.characters[2].name = "NainTwo"
     }
     
     // Configure the team of the player
     public func configureTeam(player: Player) {
-        let iCharacters = 0
+        var iCharacters = 0
         
         while (iCharacters < charactersMax) {
-            print("\(player.name), choisit le type du personnage \(iCharacters+1): ", terminator: "")
+            print("\(player.name), choisit le type du personnage \(iCharacters+1): ")
+            print("1 - Combattant : Vie(100) Dégat(10)")
+            print("2 - Mage : Vie(40) Soin(20)")
+            print("3 - Colosse : Vie(150) Dégat(5)")
+            print("4 - Nain : Vie(50) Dégat(30)")
             
-            for i in 0...3 {
-                if let characType = CharacterType(rawValue:i) {
-                    print("[\(i+1)] -- \(characType)",terminator: " ")
-                }
+            switch Global.input() {
+            case 1:
+                player.characters.append(Fighter())
+            case 2:
+                player.characters.append(Mage())
+            case 3:
+                player.characters.append(Colossus())
+            case 4:
+                player.characters.append(Dwarf())
+            default:
+                print("Veuillez entrer un numéro valide")
+                configureTeam(player: player)
             }
             
-            /*if player.choiceCharacterType() {
-             print("Entrer le nom du personnage \(iCharacters+1): ")
-             if choiceCharacterName(player: player) {
-             // Next character
-             iCharacters += 1
-             }
-             }*/
+            choiceCharacterName(player: player)
+            iCharacters += 1
         }
+    }
+    
+    // Choice the name of the character
+    private func choiceCharacterName(player: Player) {
+        print("Veuillez entrer le nom du personnage \(player.characters.count)")
+        
+        if let response = readLine() {
+            if response.characters.count > 0 && checkNameExisting(name: response) == false {
+                player.characters[player.characters.count-1].name = response
+                player.characters[player.characters.count-1].introduceYou()
+                print("")
+            } else {
+                print("Le nom est non valide ou déjà utilisé")
+                let _ = choiceCharacterName(player: player)
+            }
+        }
+    }
+    
+    // Check if the name entered is already existing
+    private func checkNameExisting(name: String) -> Bool {
+        
+        for character in player1.characters {
+            if character.name == name {
+                return true
+            }
+        }
+        
+        for character in player2.characters {
+            if character.name == name {
+                return true
+            }
+        }
+        
+        return false
     }
     
     // Presentation of the game
@@ -102,10 +151,12 @@ class Game {
         print("")
     }
     
+    // A random box appear
     private func boxAppear(character: Character) {
         let randomBoxValue = Int(arc4random_uniform(4))
         
         if randomBoxValue == 0 {
+            print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
             switch BoxType(rawValue: Int(arc4random_uniform(3)))! {
             case .WeaponBox:
                 weaponBox(selection: character)
@@ -114,6 +165,8 @@ class Game {
             case .ArmorBox:
                 armorBox(selection: character)
             }
+            print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
+            print("")
         }
     }
     
@@ -123,16 +176,15 @@ class Game {
         
         if let randomWeaponType = WeaponType(rawValue: Int(arc4random_uniform(1))) {
             randomWeapon.type = randomWeaponType
-            print("****** Une boite d'arme apparait ***** ")
-            print("\(selection.name) ouvre la boite d'arme (type:\(randomWeapon.type)", terminator: " ")
+            print("une boite d'arme apparait (type: \(randomWeapon.type)", terminator: " ")
             
             switch randomWeapon.type {
             case .Damage:
                 randomWeapon.damageValue = Int(arc4random_uniform(20)) + 30
-                print("dégat:\(randomWeapon.damageValue))")
+                print("dégat: \(randomWeapon.damageValue))")
             case .Healing:
                 randomWeapon.healValue = Int(arc4random_uniform(10)) + 20
-                print("soin:\(randomWeapon.healValue))")
+                print("soin: \(randomWeapon.healValue))")
             }
             
             if selection.weapon.type == randomWeapon.type {
@@ -142,30 +194,22 @@ class Game {
                 print("\(selection.name) ne peux pas s'équiper de cette arme")
             }
         }
-        print("")
     }
     
     // Open the care box and add the life to the character
     private func careBox(selection: Character) {
         let careBoxValue = Int(arc4random_uniform(20)) + 10
         
-        print("****** Une boite de soin apparait *****")
-        print("\(selection.name) ouvre la boite de soin (soin:\(careBoxValue))")
-        selection.life += careBoxValue
+        print("une boite de soin apparait (soin: \(careBoxValue))")
+        selection.receveLife(life: careBoxValue)
     }
     
     // Open the armor box and add the armor to the character
     private func armorBox(selection: Character) {
         let armorBoxValue = Int(arc4random_uniform(20)) + 10
         
-        print("****** Une boite d'armure apparait ***** ")
-        print("\(selection.name) ouvre la boite d'armure (armure:\(armorBoxValue))")
-        selection.armor += armorBoxValue
-    }
-    
-    // Update all data on the team
-    private func updateTeam() {
-        
+        print("Une boite d'armure apparait (armure: \(armorBoxValue))")
+        selection.receveArmor(armor: armorBoxValue)
     }
     
     // Switch the current player
@@ -179,43 +223,6 @@ class Game {
     
     // Display the winner of the game
     private func displayWinner(winner: Player) {
-        print("\(winner.name) gagne en \(numberOfTurn) tours de jeu")
-    }
-    
-    // Choice the name of the character
-    private func choiceCharacterName(player: Player) -> Bool {
-        var characterNameOk = false
-        
-        if let response = readLine() {
-            if response.characters.count > 0 && (checkNameExisting(name: response) == false){
-                player.characters[player.characters.count-1].name = response
-                print("Personnage 1 : \(response) \(player.characters[player.characters.count-1].typeName)")
-                print("")
-                characterNameOk = true
-            } else {
-                print("Nom non valide ou déjà utilisé")
-                let _ = choiceCharacterName(player: player)
-            }
-        }
-        
-        return characterNameOk
-    }
-    
-    // Check if the name entered is already existing
-    private func checkNameExisting(name: String) -> Bool {
-        var iCharacter: Int
-        
-        for _ in 0...1 {
-            iCharacter = 0
-            while iCharacter < player1.characters.count {
-                if (player1.characters[iCharacter].name == name) {
-                    return true
-                } else {
-                    iCharacter += 1
-                }
-            }
-        }
-        
-        return false
+        print("\(winner.name) gagne la partie en \(numberOfTurn) tours de jeu")
     }
 }

@@ -19,6 +19,7 @@ class Dwarf: Character {
         self.weapon = Weapon(type: .Damage, damageValue: 30, healValue : 0)
     }
     
+    // Override the mother function to add the value of damage
     override func introduceYou() {
         super.introduceYou()
         print("dégat(\(self.weapon.damageValue))")
