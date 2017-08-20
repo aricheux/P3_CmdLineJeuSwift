@@ -27,7 +27,7 @@ class Global {
                 selectionNumber = responseNumber
             } else {
                 print("Veuillez entrer un numéro valide")
-                let _ = input()
+                selectionNumber = input()
             }
         }
         

@@ -94,6 +94,7 @@ class Game {
             player.characters.append(Dwarf())
         default:
             print("Veuillez entrer un numéro valide", terminator: "\n\n")
+            
             choiceCharacterType(player: player)
         }
     }

@@ -39,6 +39,7 @@ class Player {
             self.characters.append(Dwarf())
         default:
             print("Veuillez entrer un numéro valide")
+            
             choiceCharacterType()
         }
         
