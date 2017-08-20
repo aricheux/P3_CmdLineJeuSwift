@@ -10,6 +10,7 @@ import Foundation
 
 // Define the Character class
 class Character {
+    
     // Define the name of the character
     var name: String
     
@@ -53,11 +54,13 @@ class Character {
         if self.armor < damage {
             self.life -= damage - self.armor
             if self.life < 0 { self.life = 0 }
+            
             print("\(self.name) perd \(oldLife - self.life) points de vie")
         }
         
         self.armor -= damage
         if self.armor < 0 { self.armor = 0 }
+        
         if oldArmor > self.armor {
             print("\(self.name) perd \(oldArmor - self.armor) points d'armure")
         }
@@ -66,6 +69,7 @@ class Character {
     // Function to update the life value when the character receve life from box or mage
     public func receveLife(life: Int) {
         let oldLife = self.life
+        
         self.life += life
         print("\(self.name) gagne \(self.life - oldLife) points de vie")
     }
@@ -73,6 +77,7 @@ class Character {
     // Function to update the armor value when the character receve armor from box
     public func receveArmor(armor: Int) {
         let oldArmor = self.armor
+        
         self.armor += armor
         print("\(self.name) gagne \(self.armor - oldArmor) points d'armure")
     }

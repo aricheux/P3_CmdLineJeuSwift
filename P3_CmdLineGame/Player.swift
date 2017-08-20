@@ -28,7 +28,6 @@ class Player {
     
     // Choice the type of the character
     public func choiceCharacterType() {
-        
         switch Global.input() {
         case 1:
             self.characters.append(Fighter())
@@ -47,19 +46,18 @@ class Player {
     }
     
     // the player select who use
-    public func selectCharacter() -> Character {
-        var selectedCharacter = Character()
+    public func selectCharacter() -> Character? {
+        var selectedCharacter: Character?
         
         print("A toi \(self.name), choisit un personnage dans ton équipe")
-        
         self.introduceTeam()
         
         let selectionNumber = Global.input()
         if selectionNumber >= 1 && selectionNumber <= self.characters.count {
-            selectedCharacter = self.characters[selectionNumber - 1]
-            print("Tu as choisi", terminator: " ")
-            selectedCharacter.introduceYou()
+            print("Tu as choisi ", terminator: "")
+            self.characters[selectionNumber - 1].introduceYou()
             print("")
+            selectedCharacter = self.characters[selectionNumber - 1]
         } else {
             print("Veuillez entrer un numéro valide")
             selectedCharacter = selectCharacter()
@@ -69,8 +67,8 @@ class Player {
     }
     
     // the player select the target
-    public func selectTarget(selection: Character, adversary: Player) -> Character {
-        var selectedTarget = Character()
+    public func selectTarget(selection: Character, adversary: Player) -> Character? {
+        var selectedTarget: Character?
         var selectedPlayer = Player(name: "")
         
         if selection is Mage {
@@ -99,7 +97,7 @@ class Player {
         var indexDead: Int?
         isAlive = false
         
-        for i in 0...self.characters.count-1 {
+        for i in 0...self.characters.count - 1 {
             if self.characters[i].life == 0 {
                 print("\(self.characters[i].name) est mort..")
                 indexDead = i
@@ -111,13 +109,14 @@ class Player {
         if let newIndexDead = indexDead {
             self.characters.remove(at: newIndexDead)
         }
+        
         print("")
     }
     
     // Introduce all character available in the team
     private func introduceTeam() {
         for i in 0...self.characters.count - 1 {
-            print("[\(i+1)]", terminator: " ")
+            print("\(i+1) - ", terminator: "")
             self.characters[i].introduceYou()
         }
         print("")
