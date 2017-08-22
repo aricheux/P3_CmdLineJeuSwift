@@ -8,9 +8,10 @@
 
 import Foundation
 
-// Cla
+// Define global class
 class Global {
-    // Recovery the value entered by the player
+    
+    // Recovery the value entered by the player / Function available for every other class  
     static func input() -> Int {
         var selectionNumber = 0
         
