@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		710338981F42FA000052D4BB /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710338971F42FA000052D4BB /* Box.swift */; };
+		711728C21F49FF82007FC3A1 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711728C11F49FF82007FC3A1 /* String.swift */; };
 		712415B41F3BA83800F88196 /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712415B31F3BA83700F88196 /* Global.swift */; };
 		7131BAC11F37B64B00F5E185 /* Fighter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7131BAC01F37B64B00F5E185 /* Fighter.swift */; };
 		7131BAC31F37B65500F5E185 /* Mage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7131BAC21F37B65500F5E185 /* Mage.swift */; };
@@ -34,6 +35,7 @@
 
 /* Begin PBXFileReference section */
 		710338971F42FA000052D4BB /* Box.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Box.swift; sourceTree = "<group>"; };
+		711728C11F49FF82007FC3A1 /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		712415B31F3BA83700F88196 /* Global.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
 		7131BAC01F37B64B00F5E185 /* Fighter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fighter.swift; sourceTree = "<group>"; };
 		7131BAC21F37B65500F5E185 /* Mage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mage.swift; sourceTree = "<group>"; };
@@ -96,6 +98,7 @@
 				713B8DB91F2A08BC0092CE04 /* Weapon.swift */,
 				710338971F42FA000052D4BB /* Box.swift */,
 				712415B31F3BA83700F88196 /* Global.swift */,
+				711728C11F49FF82007FC3A1 /* String.swift */,
 			);
 			path = P3_CmdLineGame;
 			sourceTree = "<group>";
@@ -165,6 +168,7 @@
 				7131BAC11F37B64B00F5E185 /* Fighter.swift in Sources */,
 				713B8DBA1F2A08BC0092CE04 /* Weapon.swift in Sources */,
 				710338981F42FA000052D4BB /* Box.swift in Sources */,
+				711728C21F49FF82007FC3A1 /* String.swift in Sources */,
 				713B8DBC1F2A08D20092CE04 /* Character.swift in Sources */,
 				713B8DB81F2A08AF0092CE04 /* Player.swift in Sources */,
 				713B8DB61F2A08A50092CE04 /* Game.swift in Sources */,

@@ -8,7 +8,7 @@
 
 import Foundation
 
-// Class Dwarf
+// Define Class Dwarf
 class Dwarf: Character {
     
     // Initializes with special poperty

@@ -8,36 +8,39 @@
 
 import Foundation
 
+// Define all type of box available
 enum BoxType: Int {
     case WeaponBox
     case CareBox
     case ArmorBox
 }
 
+// Define the class box
 class Box {
     
-    // A random box appear
+    // A box appaear randomly and open it depending of the type
     public func boxAppear(character: Character) {
-        let randomBoxValue = Int(arc4random_uniform(4))
-        
+        let randomBoxValue = Int(arc4random_uniform(3))
+
         if randomBoxValue == 0 {
             print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
             if let boxType = BoxType(rawValue: Int(arc4random_uniform(3))) {
                 switch boxType {
                 case .WeaponBox:
-                    weaponBox(selection: character)
+                    openWeaponBox(selection: character)
                 case .CareBox:
-                    careBox(selection: character)
+                    openCareBox(selection: character)
                 case .ArmorBox:
-                    armorBox(selection: character)
+                    openArmorBox(selection: character)
                 }
             }
+            
             print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * *", terminator: "\n\n")
         }
     }
     
     // Open the weapon box and change the weapon if it's possible
-    private func weaponBox(selection: Character) {
+    private func openWeaponBox(selection: Character) {
         let randomWeapon = Weapon()
         
         if let randomWeaponType = WeaponType(rawValue: Int(arc4random_uniform(1))) {
@@ -63,7 +66,7 @@ class Box {
     }
     
     // Open the care box and add the life to the character
-    private func careBox(selection: Character) {
+    private func openCareBox(selection: Character) {
         let careBoxValue = Int(arc4random_uniform(20)) + 10
         
         print("une boite de soin apparait (soin: \(careBoxValue))")
@@ -71,7 +74,7 @@ class Box {
     }
     
     // Open the armor box and add the armor to the character
-    private func armorBox(selection: Character) {
+    private func openArmorBox(selection: Character) {
         let armorBoxValue = Int(arc4random_uniform(20)) + 10
         
         print("Une boite d'armure apparait (armure: \(armorBoxValue))")

@@ -8,7 +8,7 @@
 
 import Foundation
 
-// Class Mage
+// Define the Class Mage
 class Mage: Character {
     
     // Initializes with special poperty
@@ -16,14 +16,16 @@ class Mage: Character {
         super .init()
         self.typeName = "Mage"
         self.life = 40
-        self.weapon = Weapon(type: .Healing, damageValue: 20, healValue : 20)
+        self.weapon = Weapon(type: .Healing, damageValue: 0, healValue : 20)
     }
     
+    // Override the mother function to add the value of heal
     override func introduceYou() {
         super.introduceYou()
         print("soin(\(self.weapon.healValue))")
     }
     
+    // Override the mother function because the mage can only heal
     override func doAction(target: Character) {
         print("\(self.name) soigne \(target.name)")
         target.receveLife(life: self.weapon.healValue)

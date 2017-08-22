@@ -32,15 +32,13 @@ class Game {
         presentationGame()
         
         while currentPlayer.isAlive {
-            if let selectedCharacter = currentPlayer.selectCharacter() {
-                box.boxAppear(character: selectedCharacter)
-                if let selectedTarget = currentPlayer.selectTarget(selection: selectedCharacter, adversary: currentAdversary) {
-                    selectedCharacter.doAction(target: selectedTarget)
-                    currentAdversary.updateTeam()
-                    currentPlayer = switchPlayer(player: currentPlayer)
-                    currentAdversary = switchPlayer(player: currentAdversary)
-                }
-            }
+            let selectedCharacter = currentPlayer.selectCharacter()
+            box.boxAppear(character: selectedCharacter)
+            let selectedTarget = currentPlayer.selectTarget(selection: selectedCharacter, adversary: currentAdversary)
+            selectedCharacter.doAction(target: selectedTarget)
+            currentAdversary.updateTeam()
+            currentPlayer = switchPlayer(player: currentPlayer)
+            currentAdversary = switchPlayer(player: currentAdversary)
         }
         currentPlayer = switchPlayer(player: currentPlayer)
         displayWinner(winner: currentPlayer)
@@ -56,13 +54,13 @@ class Game {
     
     // Configure each team player and computer
     private func chooseTeam() {
+        configureComputerTeam()
         
         for _ in 0...charactersMax-1 {
             choiceCharacterType(player: playerOne)
             choiceCharacterName(player: playerOne)
         }
         
-        configureComputerTeam()
     }
     
     // Add 3 character to the computer team
@@ -75,7 +73,7 @@ class Game {
         playerTwo.characters[2].name = "NainTwo"
     }
 
-    // Choice the name of the character
+    // Choice the type of the character
     private func choiceCharacterType(player: Player) {
         print("\(player.name), choisit le type du personnage \(player.characters.count + 1) :")
         print("1 - Combattant : Vie(100) Dégat(10)")
@@ -115,7 +113,7 @@ class Game {
         }
     }
     
-    // Check if the name entered is already existing
+    // Check if the name entered is already existing in the game
     private func checkNameExisting(name: String) -> Bool {
         
         for character in playerOne.characters {

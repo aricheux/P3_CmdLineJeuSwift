@@ -46,9 +46,8 @@ class Player {
         print("Vous avez choisi le type \(self.characters[self.characters.count].typeName)")
     }
     
-    // the player select who use
-    public func selectCharacter() -> Character? {
-        var selectedCharacter: Character?
+    // the player select who he want use
+    public func selectCharacter() -> Character {
         
         print("A toi \(self.name), choisit un personnage dans ton équipe")
         self.introduceTeam()
@@ -58,18 +57,15 @@ class Player {
             print("Tu as choisi ", terminator: "")
             self.characters[selectionNumber - 1].introduceYou()
             print("")
-            selectedCharacter = self.characters[selectionNumber - 1]
+            return self.characters[selectionNumber - 1]
         } else {
             print("Veuillez entrer un numéro valide")
-            selectedCharacter = selectCharacter()
+            return selectCharacter()
         }
-        
-        return selectedCharacter
     }
     
-    // the player select the target
-    public func selectTarget(selection: Character, adversary: Player) -> Character? {
-        var selectedTarget: Character?
+    // the player select the character's target
+    public func selectTarget(selection: Character, adversary: Player) -> Character {
         var selectedPlayer = Player(name: "")
         
         if selection is Mage {
@@ -84,13 +80,12 @@ class Player {
         
         let selectionNumber = Global.input()
         if selectionNumber >= 1 && selectionNumber <= selectedPlayer.characters.count {
-            selectedTarget = selectedPlayer.characters[selectionNumber - 1]
+            return selectedPlayer.characters[selectionNumber - 1]
         } else {
             print("Veuillez entrer un numéro valide")
-            selectedTarget = selectTarget(selection: selection, adversary: adversary)
+            return selectTarget(selection: selection, adversary: adversary)
         }
         
-        return selectedTarget
     }
     
     // Update of the team's character

@@ -8,15 +8,7 @@
 
 import Foundation
 
-extension String {
-    var isStringAnInt: Int? {
-        if Int(self) != nil {
-            return Int(self)
-        }
-        return nil
-    }
-}
-
+// Cla
 class Global {
     // Recovery the value entered by the player
     static func input() -> Int {

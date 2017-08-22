@@ -8,7 +8,7 @@
 
 import Foundation
 
-// Class Fighter
+// Define the Class Fighter
 class Fighter: Character {
     
     // Initializes with special poperty

@@ -8,7 +8,7 @@
 
 import Foundation
 
-// Class Colossus
+// Define Class Colossus
 class Colossus: Character {
     
     // Initializes with special poperty
