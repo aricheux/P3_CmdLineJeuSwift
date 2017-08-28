@@ -16,7 +16,7 @@ class Mage: Character {
         super .init()
         self.typeName = "Mage"
         self.life = 40
-        self.weapon = Weapon(type: .Healing, damageValue: 0, healValue : 20)
+        self.weapon = Weapon(type: .Healing, healValue : 20)
     }
     
     // Override the mother function to add the value of heal

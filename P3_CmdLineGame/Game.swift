@@ -117,13 +117,13 @@ class Game {
     private func checkNameExisting(name: String) -> Bool {
         
         for character in playerOne.characters {
-            if character.name == name {
+            if character.name.lowercased() == name.lowercased() {
                 return true
             }
         }
         
         for character in playerTwo.characters {
-            if character.name == name {
+            if character.name.lowercased() == name.lowercased() {
                 return true
             }
         }
